@@ -25,9 +25,9 @@ const player = {
     height: 67.75,
     //position of frame cut out from sprite sheet to show only 1 frame
     frameX: 0,
-    frameY: 0,
+    frameY: 3,
     //pixels movement speed
-    speed: 2,
+    speed: 1,
     //keep track of moving or not. standing walking animation
     moving: false
 };
@@ -53,8 +53,10 @@ function animate(){
     //draws our background and where to start drawing from
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
                                                                                     //change these to change size of sprite
-    drawSprite(playerSprite, 0, 0, player.width, player.height, player.x, player.y, player.width, player.height);
+    drawSprite(playerSprite, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, player.width, player.height);
+                            //what to crop and where to start cropping from in sprite sheet
     movePlayer();
+    moveSprite();
     requestAnimationFrame(animate);
 }
 
@@ -64,25 +66,39 @@ animate();
 //keep track of keys pressed on keyboard by adding and removing values from keys arrays
 window.addEventListener("keydown", function(e){
     keys[e.key] = true;
+    player.moving = true;
     console.log(e.key);
     console.log(player.x);
 });
 
 window.addEventListener("keyup", function(e){
     delete keys[e.key];
+    player.moving = false;
 });
+
+function moveSprite(){
+    if(player.frameX<3 && player.moving){
+        player.frameX++;
+    }else{
+        player.frameX = 0;
+    }
+}
 
 function movePlayer(){
     if(keys["w"] && player.y>2){
+        player.frameY = 1;
         player.y -= player.speed;
     }
     if(keys["a"] && player.x>2){
+        player.frameY = 2;
         player.x -= player.speed;
     }
-    if(keys["s"] && player.y<855){
+    if(keys["s"] && player.y<canvas.height-player.height){
+        player.frameY = 0;
         player.y += player.speed;
     }
-    if(keys["d"] && player.x<1450){
+    if(keys["d"] && player.x<canvas.width-player.width){
+        player.frameY = 3;
         player.x += player.speed;
     }
 }
