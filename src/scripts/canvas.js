@@ -66,9 +66,8 @@ animate();
 //keep track of keys pressed on keyboard by adding and removing values from keys arrays
 window.addEventListener("keydown", function(e){
     keys[e.key] = true;
-    player.moving = true;
     console.log(e.key);
-    console.log(player.x);
+    // console.log(player.x);
 });
 
 window.addEventListener("keyup", function(e){
@@ -85,19 +84,25 @@ function moveSprite(){
 }
 
 function movePlayer(){
-    if(keys["w"] && player.y>2){
+    if(keys["w"] && player.y>2 && !keys["a"] && !keys["s"] && !keys["d"]){
+        player.moving = true; //had to put these in here to prevent animation of sprite on random key presses
         player.frameY = 1;
         player.y -= player.speed;
+    }else{
+        player.moving = false;
     }
-    if(keys["a"] && player.x>2){
+    if(keys["a"] && player.x>2 && !keys["w"] && !keys["s"] && !keys["d"]){
+        player.moving = true;
         player.frameY = 2;
         player.x -= player.speed;
     }
-    if(keys["s"] && player.y<canvas.height-player.height){
+    if(keys["s"] && player.y<canvas.height-player.height && !keys["a"] && !keys["w"] && !keys["d"]){
+        player.moving = true;
         player.frameY = 0;
         player.y += player.speed;
     }
-    if(keys["d"] && player.x<canvas.width-player.width){
+    if(keys["d"] && player.x<canvas.width-player.width && !keys["a"] && !keys["s"] && !keys["w"]){
+        player.moving = true;
         player.frameY = 3;
         player.x += player.speed;
     }
