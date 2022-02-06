@@ -1,14 +1,14 @@
-class Example {
-    constructor(ele){
-        this.ele = ele
-        this.ele.innerHTML = "<h1>test</h1>"
-        this.handleClick = this.handleClick.bind(this)
-        this.ele.addEventListener("click", this.handleClick)
-    }
+// class Example {
+//     constructor(ele){
+//         this.ele = ele
+//         this.ele.innerHTML = "<h1>test</h1>"
+//         this.handleClick = this.handleClick.bind(this)
+//         this.ele.addEventListener("click", this.handleClick)
+//     }
 
-    handleClick(){
-        this.ele.children[0].innerText = "Ouch!"
-    }
-}
+//     handleClick(){
+//         this.ele.children[0].innerText = "Ouch!"
+//     }
+// }
 
-export default Example; 
+// export default Example; 
