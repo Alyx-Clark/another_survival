@@ -1,16 +1,25 @@
 // import Player from './player.js';
 
+
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
+// // maybe can use for title screen music
+// const music = document.createElement('audio');
+// music.src = "./sounds/Dungeon-Crawler"
+// music.play();
+
+
+
 
 
 //keep track of keys pressed on keyboard using event listeners
 const keys = [];
 
 // this will store all data about character
- player = {
+player = {
     //players position
     x: 410,
     y: 570,
@@ -21,11 +30,44 @@ const keys = [];
     frameX: 0,
     frameY: 3,
     //pixels movement speed
-    speed: 11,
+    speed: 10,
     //keep track of moving or not. standing walking animation
     moving: false,
     score: 0
 }
+
+const music = document.createElement('audio');
+music.src = "./sounds/Haunted_Swamp.wav";
+
+const audioImg = new Image();
+audioImg.src = "./images/soundButton.png"
+
+const muteImg = new Image();
+muteImg.src = "./images/muteButton.png"
+
+const walkSound = document.createElement("audio");
+walkSound.src = "./sounds/walking.wav";
+walkSound.playbackRate = 12;
+
+
+audioButton = {
+    x:2,
+    y:2,
+    endx: 2 + (canvas.width/50),
+    endy: 2 + (canvas.height/30)
+}
+
+window.addEventListener('click', function(e){
+    if((e.x > audioButton.x && e.x < audioButton.endx) && (e.y > audioButton.y && e.y < audioButton.endy)){
+        if(music.paused){
+            music.play();
+            music.loop = true;
+        }else{
+            music.pause();
+        }
+    }
+})
+
 
 //player spirte image
 const playerSprite = new Image();
@@ -128,9 +170,20 @@ function animate(){
                                                                                         //change these to change size of sprite
         drawSprite(playerSprite, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, player.width, player.height);
                                 //what to crop and where to start cropping from in sprite sheet
+        if(!music.paused){
+            ctx.drawImage(audioImg, 2, 2, canvas.width/50, canvas.height/30);
+        }else{
+            ctx.drawImage(muteImg, 2, 2, canvas.width/50, canvas.height/30);
+        }
+        if(player.moving) walkSound.play();
         movePlayer();
         moveSprite();
     }
 }
 
 startAnimating(15);
+
+
+// window.addEventListener('mousemove', function(event){
+//     console.log(event.x, event.y);
+// })
