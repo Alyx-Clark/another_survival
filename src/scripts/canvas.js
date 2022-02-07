@@ -1,21 +1,15 @@
+// import Player from './player.js';
+
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 
-let score = 0;
-
-ctx.font = "50px Georgia";
-// c.fillRect(100, 100, 100, 100);
-// c.fillRect(300, 300, 300, 300);
-// c.fillRect(200, 200, 200, 200);
-// console.log(canvas);
-
 //keep track of keys pressed on keyboard using event listeners
 const keys = [];
 
-//this will store all data about character
+// this will store all data about character
 const player = {
     //players position
     x: 410,
@@ -29,12 +23,16 @@ const player = {
     //pixels movement speed
     speed: 1,
     //keep track of moving or not. standing walking animation
-    moving: false
-};
+    moving: false,
+    score: 0
+}
 
 //player spirte image
 const playerSprite = new Image();
 playerSprite.src = "./images/player_sprite_resize.png";
+
+// const enemySprite = new Image();
+// enemySprite.src = ""
 
 //background of game image
 const background = new Image();
