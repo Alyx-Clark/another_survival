@@ -256,8 +256,17 @@ const house4 = new building(190*currentX, 680*currentY, 150*currentX, 110*curren
 obstacles.push(house4);
 const house5 = new building(540*currentX, 680*currentY, 150*currentX, 110*currentY);
 obstacles.push(house5);
-const house6 = new building(940*currentX, 680*currentY, 150*currentX, 110*currentY);
+const house6 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
 obstacles.push(house6);
+const store1 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(store1);
+const store2 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(store2);
+const store3 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(store3);
+const largeStore = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(largeStore);
+
 
 function isColliding(callback, player, ...obstacles){
     let boo = false;
