@@ -31,8 +31,8 @@ const keys = [];
 // this will store all data about character
 const player = {
     //players position
-    x: canvas.width/2,
-    y: canvas.height/2,
+    x: 760 * currentX,
+    y: 580 * currentY,
     //based on sprite player size
     width: 42.5,
     height: 68.5,
@@ -247,24 +247,25 @@ function collides(a, b){
 
 const obstacles = [];
 const house1 = new building(190*currentX, 30*currentY, 150*currentX, 110*currentY);
-obstacles.push(house1);
 const house2 = new building(395*currentX, 30*currentY, 145*currentX, 110*currentY);
-obstacles.push(house2);
 const house3 = new building(605*currentX, 30*currentY, 150*currentX, 110*currentY);
-obstacles.push(house3);
 const house4 = new building(190*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(house4);
-const house5 = new building(540*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(house5);
-const house6 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(house6);
-const store1 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(store1);
-const store2 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(store2);
-const store3 = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
-obstacles.push(store3);
+const house5 = new building(540*currentX, 680*currentY, 160*currentX, 110*currentY);
+const house6 = new building(945*currentX, 690*currentY, 150*currentX, 100*currentY);
+
+const store1 = new building(185*currentX, 385*currentY, 310*currentX, 160*currentY);
+const store2 = new building(670*currentX, 380*currentY, 302*currentX, 160*currentY);
+const store3 = new building(1326*currentX, 710*currentY, 302*currentX, 80*currentY);
 const largeStore = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(house1);
+obstacles.push(house2);
+obstacles.push(house3);
+obstacles.push(house4);
+obstacles.push(house5);
+obstacles.push(house6);
+obstacles.push(store1);
+obstacles.push(store2);
+obstacles.push(store3);
 obstacles.push(largeStore);
 
 
