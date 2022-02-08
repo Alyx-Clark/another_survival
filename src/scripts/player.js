@@ -213,7 +213,7 @@ window.addEventListener('click', function(event){
     console.log(canvas.width, canvas.height);
 })
 
-class building {
+class obstacle {
     constructor(x, y, w, h) {
         this.x = x;
         this.y = y;
@@ -246,27 +246,66 @@ function collides(a, b){
 // }
 
 const obstacles = [];
-const house1 = new building(190*currentX, 30*currentY, 150*currentX, 110*currentY);
-const house2 = new building(395*currentX, 30*currentY, 145*currentX, 110*currentY);
-const house3 = new building(605*currentX, 30*currentY, 150*currentX, 110*currentY);
-const house4 = new building(190*currentX, 680*currentY, 150*currentX, 110*currentY);
-const house5 = new building(540*currentX, 680*currentY, 160*currentX, 110*currentY);
-const house6 = new building(945*currentX, 690*currentY, 150*currentX, 100*currentY);
+const house1 = new obstacle(190*currentX, 30*currentY, 150*currentX, 110*currentY);
+const house2 = new obstacle(395*currentX, 30*currentY, 145*currentX, 110*currentY);
+const house3 = new obstacle(605*currentX, 30*currentY, 150*currentX, 110*currentY);
+const house4 = new obstacle(190*currentX, 680*currentY, 150*currentX, 110*currentY);
+const house5 = new obstacle(540*currentX, 680*currentY, 160*currentX, 110*currentY);
+const house6 = new obstacle(945*currentX, 685*currentY, 150*currentX, 100*currentY);
 
-const store1 = new building(185*currentX, 385*currentY, 310*currentX, 160*currentY);
-const store2 = new building(670*currentX, 380*currentY, 302*currentX, 160*currentY);
-const store3 = new building(1326*currentX, 710*currentY, 302*currentX, 80*currentY);
-const largeStore = new building(945*currentX, 680*currentY, 150*currentX, 110*currentY);
+const store1left = new obstacle(190*currentX, 435*currentY, 80*currentX, 90*currentY);
+const store1right = new obstacle(385*currentX, 435*currentY, 110*currentX, 90*currentY);
+const store1middle = new obstacle(280*currentX, 375*currentY, 170*currentX, 100*currentY);
+
+const store2left = new obstacle(665*currentX, 435*currentY, 60*currentX, 90*currentY);
+const store2right = new obstacle(840*currentX, 435*currentY, 130*currentX, 90*currentY);
+const store2middle = new obstacle(720*currentX, 375*currentY, 190*currentX, 90*currentY);
+
+const store3 = new obstacle(1330*currentX, 710*currentY, 302*currentX, 80*currentY);
+const largeStore = new obstacle(1100*currentX, 70*currentY, 250*currentX, 125*currentY);
+
+const gravestone1 = new obstacle(1*currentX, 430*currentY, 110*currentX, 30*currentY);
+const gravestone2 = new obstacle(1465*currentX, 370*currentY, 10*currentX, 1*currentY);
+
+const tree1 = new obstacle(30*currentX, 1*currentY, 120*currentX, 90*currentY);
+const tree2 = new obstacle(1395*currentX, 110*currentY, 120*currentX, 90*currentY);
+const tree3 = new obstacle(1287*currentX, 285*currentY, 120*currentX, 70*currentY);
+const tree4 = new obstacle(972*currentX, 437*currentY, 120*currentX, 70*currentY);
+const tree5 = new obstacle(1380*currentX, 560*currentY, 120*currentX, 70*currentY);
+const tree6 = new obstacle(1060*currentX, 620*currentY, 120*currentX, 70*currentY);
+const tree7 = new obstacle(370*currentX, 725*currentY, 135*currentX, 80*currentY);
+
+const sign = new obstacle(1035*currentX, 235*currentY, 50*currentX, 1*currentY);
+
+
+
+
+
 obstacles.push(house1);
 obstacles.push(house2);
 obstacles.push(house3);
 obstacles.push(house4);
 obstacles.push(house5);
 obstacles.push(house6);
-obstacles.push(store1);
-obstacles.push(store2);
+obstacles.push(store1left);
+obstacles.push(store1right);
+obstacles.push(store1middle);
+obstacles.push(store2left);
+obstacles.push(store2right);
+obstacles.push(store2middle);
 obstacles.push(store3);
 obstacles.push(largeStore);
+obstacles.push(gravestone1);
+obstacles.push(gravestone2);
+obstacles.push(tree1);
+obstacles.push(tree2);
+obstacles.push(tree3);
+obstacles.push(tree4);
+obstacles.push(tree5);
+obstacles.push(tree6);
+obstacles.push(tree7);
+obstacles.push(sign);
+
 
 
 function isColliding(callback, player, ...obstacles){
