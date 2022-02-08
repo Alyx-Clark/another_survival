@@ -276,6 +276,9 @@ const tree6 = new obstacle(1060*currentX, 620*currentY, 120*currentX, 70*current
 const tree7 = new obstacle(370*currentX, 725*currentY, 135*currentX, 80*currentY);
 
 const sign = new obstacle(1035*currentX, 235*currentY, 50*currentX, 1*currentY);
+const littleSign = new obstacle(840*currentX, 820*currentY, 10*currentX, 1*currentY);
+const boxes = new obstacle(1100*currentX, 785*currentY, 30*currentX, 1*currentY);
+
 
 
 
@@ -305,6 +308,8 @@ obstacles.push(tree5);
 obstacles.push(tree6);
 obstacles.push(tree7);
 obstacles.push(sign);
+obstacles.push(littleSign);
+obstacles.push(boxes);
 
 
 
