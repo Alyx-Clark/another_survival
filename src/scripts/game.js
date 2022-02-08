@@ -1,7 +1,7 @@
 import Player from "./playerFinal";
 import Enemy from "./enemyFinal";
 import Obstacle from "./obstacles.js";
-import Button from "./buttons.js";
+import Button from "./button.js";
 
 // // maybe can use for title screen music
 // const music = document.createElement('audio');
@@ -22,14 +22,8 @@ export default class Game {
         this.currentX = this.canvas.width/this.scaleX;
         this.currentY = this.canvas.height/this.scaleY;
         this.keys = [];
-        this.player1 = new Player(this.canvas, 760*this.currentX, 580*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
-            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3);
         this.enemy1 = new Enemy();
         this.audioButton = new Button(2, 2, 2+(this.canvas.width/50), 2+(this.canvas.heigth/30));
-        this.scaleX = 1503;
-        this.scaleY = 947;
-        this.currentX = this.canvas.width/this.scaleX;
-        this.currentY = this.canvas.heigth/this.scaleY;
         this.music = document.createElement('audio');
         this.audioImg = new Image();
         this.muteImg = new Image();
@@ -38,8 +32,10 @@ export default class Game {
         this.enemySprite = new Image();
         this.background = new Image();
         this.loadInitialComponents();
+        this.player1 = new Player(this.canvas, 760*this.currentX, 580*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
+            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3, this.obstacles);
         this.registerEvents();
-        this.startAnimating(15);
+        this.animate();
     }
 
     loadInitialComponents(){
@@ -51,7 +47,7 @@ export default class Game {
         this.muteImg.src = "./images/muteButton.png"
         this.music.src = "./sounds/Haunted_Swamp.wav";
         this.audioImg.src = "./images/soundButton.png" 
-        const obstacles = [];
+        this.obstacles = [];
         const house1 = new Obstacle(190*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
         const house2 = new Obstacle(395*this.currentX, 30*this.currentY, 145*this.currentX, 110*this.currentY);
         const house3 = new Obstacle(605*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
@@ -84,32 +80,32 @@ export default class Game {
         const sign = new Obstacle(1035*this.currentX, 235*this.currentY, 50*this.currentX, 1*this.currentY);
         const littleSign = new Obstacle(840*this.currentX, 820*this.currentY, 10*this.currentX, 1*this.currentY);
         const boxes = new Obstacle(1100*this.currentX, 785*this.currentY, 30*this.currentX, 1*this.currentY);
-        obstacles.push(house1);
-        obstacles.push(house2);
-        obstacles.push(house3);
-        obstacles.push(house4);
-        obstacles.push(house5);
-        obstacles.push(house6);
-        obstacles.push(store1left);
-        obstacles.push(store1right);
-        obstacles.push(store1middle);
-        obstacles.push(store2left);
-        obstacles.push(store2right);
-        obstacles.push(store2middle);
-        obstacles.push(store3);
-        obstacles.push(largeStore);
-        obstacles.push(gravestone1);
-        obstacles.push(gravestone2);
-        obstacles.push(tree1);
-        obstacles.push(tree2);
-        obstacles.push(tree3);
-        obstacles.push(tree4);
-        obstacles.push(tree5);
-        obstacles.push(tree6);
-        obstacles.push(tree7);
-        obstacles.push(sign);
-        obstacles.push(littleSign);
-        obstacles.push(boxes);
+        this.obstacles.push(house1);
+        this.obstacles.push(house2);
+        this.obstacles.push(house3);
+        this.obstacles.push(house4);
+        this.obstacles.push(house5);
+        this.obstacles.push(house6);
+        this.obstacles.push(store1left);
+        this.obstacles.push(store1right);
+        this.obstacles.push(store1middle);
+        this.obstacles.push(store2left);
+        this.obstacles.push(store2right);
+        this.obstacles.push(store2middle);
+        this.obstacles.push(store3);
+        this.obstacles.push(largeStore);
+        this.obstacles.push(gravestone1);
+        this.obstacles.push(gravestone2);
+        this.obstacles.push(tree1);
+        this.obstacles.push(tree2);
+        this.obstacles.push(tree3);
+        this.obstacles.push(tree4);
+        this.obstacles.push(tree5);
+        this.obstacles.push(tree6);
+        this.obstacles.push(tree7);
+        this.obstacles.push(sign);
+        this.obstacles.push(littleSign);
+        this.obstacles.push(boxes);
     }
 
     registerEvents(){
@@ -147,20 +143,21 @@ export default class Game {
         this.ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
     }
 
-    startAnimating(fps){
-        console.log("hi")
-        let fpsInterval = 1000/fps;
-        let then = Date.now();
-        let startTime = then;
-        this.animate(fpsInterval, then);
-    }
+    // startAnimating(fps){
+    //     let fpsInterval = 1000/fps;
+    //     let then = Date.now();
+    //     let startTime = then;
+    //     this.animate(then, fpsInterval);
+    // }
     
-    animate(fpsInterval, then){
-        requestAnimationFrame(this.animate.bind(this));
-        let now = Date.now();
-        let elapsed = now - then;
+    animate(){
+        setTimeout(() => {
+            requestAnimationFrame(this.animate.bind(this));
+        }, 1000 / 15);
+        // let now = Date.now();
+        // let elapsed = now - then;
         // if(elapsed > fpsInterval){
-            then = now - (elapsed % fpsInterval);
+            // then = now - (elapsed % fpsInterval);
             //clear canvas between each animation frame
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             //draws our background and where to start drawing from

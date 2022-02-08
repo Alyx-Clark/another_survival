@@ -1,5 +1,6 @@
 export default class Player{
-    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health){
+    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles){
+        this.obstacles = obstacles;
         this.canvas = canvas
         this.x = x;
         this.y = y;
@@ -21,7 +22,7 @@ export default class Player{
             this.frameY = 1;
             this.y -= this.speed;
             // scalePlayer.y -= this.speed;
-            if(this.isColliding(this.collides, this, ...obstacles)) this.y += this.speed;
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
         }else{
             this.moving = false;
         }
@@ -30,29 +31,29 @@ export default class Player{
             this.frameY = 2;
             this.x -= this.speed;
             // scalePlayer.x -= this.speed; 
-            if(this.isColliding(this.collides, this, ...obstacles)) this.x += this.speed
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed
         }
         if(keys["s"] && this.y<this.canvas.height-this.height && !keys["a"] && !keys["w"] && !keys["d"]){
             this.moving = true;
             this.frameY = 0;
             this.y += this.speed;
             // scalePlayer.y += this.speed;
-            if(this.isColliding(this.collides, this, ...obstacles)) this.y -= this.speed
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed
         }
-        if(keys["d"] && this.x<canvas.width-this.width && !keys["a"] && !keys["s"] && !keys["w"]){
+        if(keys["d"] && this.x<this.canvas.width-this.width && !keys["a"] && !keys["s"] && !keys["w"]){
             this.moving = true;
             this.frameY = 3;
             this.x += this.speed;
             // scalePlayer.x += this.speed;
-            if(this.isColliding(this.collides, this, ...obstacles)) this.x -= this.speed
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed
         }
        
     }
 
-    isColliding(callback, ...obstacles){
+    isColliding(callback, player, ...obstacles){
         let boo = false;
         obstacles.forEach(building =>{
-            if(callback(this, building)) boo = true; 
+            if(callback(player, building)) boo = true; 
         })
         return boo;
     }
