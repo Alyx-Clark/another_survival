@@ -3,8 +3,14 @@
 
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
+// canvas.width = 1200;
+// canvas.height = 600;
+// ctx.scale(4,4);
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+document.body.scrollTop = 0;
+document.body.style.overflow = 'hidden';
+
 
 // // maybe can use for title screen music
 // const music = document.createElement('audio');
@@ -12,25 +18,31 @@ canvas.height = window.innerHeight;
 // music.play();
 
 
+//this is the size of the canvas when I got the dimensions
+const scaleX = 1503;
+const scaleY = 947;
 
-
+const currentX = canvas.width/scaleX;
+const currentY = canvas.height/scaleY;
 
 //keep track of keys pressed on keyboard using event listeners
 const keys = [];
 
 // this will store all data about character
-player = {
+const player = {
     //players position
-    x: 410,
-    y: 570,
+    x: canvas.width/2,
+    y: canvas.height/2,
     //based on sprite player size
     width: 42.5,
     height: 68.5,
+    scaleWidth: 42.5 * currentX,
+    scaleHeight: 68.5 * currentY,
     //position of frame cut out from sprite sheet to show only 1 frame
     frameX: 0,
     frameY: 3,
     //pixels movement speed
-    speed: 10,
+    speed: canvas.width/170,
     //keep track of moving or not. standing walking animation
     moving: false,
     score: 0
@@ -50,7 +62,7 @@ walkSound.src = "./sounds/walking.wav";
 walkSound.playbackRate = 12;
 
 
-audioButton = {
+const audioButton = {
     x:2,
     y:2,
     endx: 2 + (canvas.width/50),
@@ -109,10 +121,12 @@ function moveSprite(){
 }
 
 function movePlayer(){
-    if(keys["w"] && player.y>2 && !keys["a"] && !keys["s"] && !keys["d"]){
+    if(keys["w"] && player.y>0 && !keys["a"] && !keys["s"] && !keys["d"]){
         player.moving = true; //had to put these in here to prevent animation of sprite on random key presses
         player.frameY = 1;
         player.y -= player.speed;
+        // scalePlayer.y -= player.speed;
+        if(isColliding(collides, player, ...obstacles)) player.y += player.speed;
     }else{
         player.moving = false;
     }
@@ -120,16 +134,22 @@ function movePlayer(){
         player.moving = true;
         player.frameY = 2;
         player.x -= player.speed;
+        // scalePlayer.x -= player.speed; 
+        if(isColliding(collides, player, ...obstacles)) player.x += player.speed
     }
     if(keys["s"] && player.y<canvas.height-player.height && !keys["a"] && !keys["w"] && !keys["d"]){
         player.moving = true;
         player.frameY = 0;
         player.y += player.speed;
+        // scalePlayer.y += player.speed;
+        if(isColliding(collides, player, ...obstacles)) player.y -= player.speed
     }
     if(keys["d"] && player.x<canvas.width-player.width && !keys["a"] && !keys["s"] && !keys["w"]){
         player.moving = true;
         player.frameY = 3;
         player.x += player.speed;
+        // scalePlayer.x += player.speed;
+        if(isColliding(collides, player, ...obstacles)) player.x -= player.speed
     }
 }
 
@@ -168,7 +188,7 @@ function animate(){
         //draws our background and where to start drawing from
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
                                                                                         //change these to change size of sprite
-        drawSprite(playerSprite, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, player.width, player.height);
+        drawSprite(playerSprite, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, canvas.width/45, canvas.height/15);
                                 //what to crop and where to start cropping from in sprite sheet
         if(!music.paused){
             ctx.drawImage(audioImg, 2, 2, canvas.width/50, canvas.height/30);
@@ -183,7 +203,69 @@ function animate(){
 
 startAnimating(15);
 
+//teleport player to help with testing
+window.addEventListener('click', function(event){
+    console.log(event.x, event.y);
+    player.x = event.x;
+    player.y = event.y;
+    // scalePlayer.x = event.x;
+    // scalePlayer.y = event.y;
+    console.log(canvas.width, canvas.height);
+})
 
-// window.addEventListener('mousemove', function(event){
-//     console.log(event.x, event.y);
-// })
+class building {
+    constructor(x, y, w, h) {
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+    }
+}
+
+
+function collides(a, b){
+    if (a.x < b.x + b.width &&
+        a.x + a.scaleWidth > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.scaleHeight > b.y){
+            return true;
+        }else{
+            return false;
+        }
+}
+
+
+
+
+
+// const scalePlayer = {
+//     x: player.x,
+//     y: player.y,
+//     width: 42.5 * currentX,
+//     height: 68.5 * currentY
+// }
+
+const obstacles = [];
+const house1 = new building(190*currentX, 30*currentY, 150*currentX, 110*currentY);
+obstacles.push(house1);
+const house2 = new building(395*currentX, 30*currentY, 145*currentX, 110*currentY);
+obstacles.push(house2);
+const house3 = new building(605*currentX, 30*currentY, 150*currentX, 110*currentY);
+obstacles.push(house3);
+const house4 = new building(190*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(house4);
+const house5 = new building(540*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(house5);
+const house6 = new building(940*currentX, 680*currentY, 150*currentX, 110*currentY);
+obstacles.push(house6);
+
+function isColliding(callback, player, ...obstacles){
+    let boo = false;
+    obstacles.forEach(building =>{
+        if(callback(player, building)) boo = true; 
+    })
+    return boo;
+}
+
+
+
