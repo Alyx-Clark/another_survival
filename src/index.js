@@ -1,6 +1,7 @@
-// import Example from "./scripts/functionality"
+import Game from "./scripts/game.js"
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const main = document.getElementById("main")
-//     new Example(main)
-// })
+document.addEventListener("DOMContentLoaded", () => {
+    const game1 = new Game();
+})
+
+
