@@ -1,5 +1,5 @@
 export default class Enemy{
-    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles){
+    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles, froze){
         this.obstacles = obstacles;
         this.canvas = canvas
         this.x = x;
@@ -14,6 +14,7 @@ export default class Enemy{
         this.moving = moving;
         this.score = score;
         this.health = health;
+        this.froze = froze;
     }
 
     between(x, min, max) {

@@ -1,5 +1,5 @@
 export default class Player{
-    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles, alive){
+    constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles, alive, blinking){
         this.obstacles = obstacles;
         this.canvas = canvas
         this.x = x;
@@ -15,6 +15,7 @@ export default class Player{
         this.score = score;
         this.health = health;
         this.alive = alive;
+        this.blinking = blinking;
     }
 
     movePlayer(keys){

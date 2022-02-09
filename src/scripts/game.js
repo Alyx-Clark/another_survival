@@ -26,19 +26,27 @@ export default class Game {
         this.music = document.createElement('audio');
         this.audioImg = new Image();
         this.muteImg = new Image();
+        this.heart = new Image();
         this.walkSound = document.createElement("audio");
+        this.damage = document.createElement("audio");
         this.playerSprite = new Image();
         this.enemySprite = new Image();
         this.background = new Image();
+        this.gameOverImg = new Image();
+        this.winImg = new Image();
+        this.paused = false;
         this.loadInitialComponents();
         this.player1 = new Player(this.canvas, 100*this.currentX, 170*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
-            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 1, this.obstacles, true);
+            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3, this.obstacles, true, false);
         this.enemy1 = new Enemy(this.canvas, 760*this.currentX, 580*this.currentY, 64, 64, 32*this.currentX,
-            48*this.currentY, 0, 3, this.canvas.width/400, false, 0, 3, this.obstacles);
+            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
         this.enemy2 = new Enemy(this.canvas, 500*this.currentX, 300*this.currentY, 64, 64, 32*this.currentX,
-            48*this.currentY, 0, 3, this.canvas.width/400, false, 0, 3, this.obstacles);
+            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
+        this.enemy3 = new Enemy(this.canvas, 10*this.currentX, 840*this.currentY, 64, 64, 32*this.currentX,
+            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
         this.registerEvents();
         this.animate();
+        this.playGame();
     }
 
     loadInitialComponents(){
@@ -49,7 +57,11 @@ export default class Game {
         this.walkSound.playbackRate = 12;
         this.muteImg.src = "./images/muteButton.png"
         this.music.src = "./sounds/Haunted_Swamp.wav";
-        this.audioImg.src = "./images/soundButton.png" 
+        this.audioImg.src = "./images/soundButton.png";
+        this.gameOverImg.src = "./images/game-over.png";
+        this.damage.src = "./sounds/hit.wav";
+        this.heart.src = "./images/heart.png";
+        this.winImg.src = "./images/win.png";
         this.obstacles = [];
         const house1 = new Obstacle(190*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
         const house2 = new Obstacle(395*this.currentX, 30*this.currentY, 145*this.currentX, 110*this.currentY);
@@ -128,11 +140,9 @@ export default class Game {
         });
         window.addEventListener('click', (event) => {
             // console.log(event.x, event.y);
-            this.player1.x = event.x;
-            this.player1.y = event.y;
-            console.log(this.player1.x, this.player1.y);
-            console.log(this.enemy1.x, this.enemy1.y);
-            console.log(this.enemy2.x, this.enemy2.y);
+            // this.player1.x = event.x;
+            // this.player1.y = event.y;
+            // console.log(this.player1.x, this.player1.y);
             // scalePlayer.x = event.x;
             // scalePlayer.y = event.y;
             // console.log(this.canvas.width, this.canvas.height);
@@ -155,21 +165,46 @@ export default class Game {
     }
 
     loseHealth(){
-        if((this.between(this.player1.x, this.enemy1.x-8, this.enemy1.x+8) && this.between(this.player1.y, this.enemy1.y-8, this.enemy1.y+8)) ||
-            (this.between(this.player1.x, this.enemy2.x-8, this.enemy2.x+8) && this.between(this.player1.y, this.enemy2.y-8, this.enemy2.y+8))){
-                this.player1.health--;
-            if(this.player1.health === 0){
-                this.player1.alive = false;
-                console.log("game over");
-                //game over screen try again?
+        let that = this;
+        if((this.between(this.player1.x, this.enemy1.x-25, this.enemy1.x+25) && this.between(this.player1.y, this.enemy1.y-25, this.enemy1.y+25)) ||
+            (this.between(this.player1.x, this.enemy2.x-25, this.enemy2.x+25) && this.between(this.player1.y, this.enemy2.y-25, this.enemy2.y+25)) ||
+            (this.between(this.player1.x, this.enemy3.x-25, this.enemy3.x+25) && this.between(this.player1.y, this.enemy3.y-25, this.enemy3.y+25))){
+                if(!this.player1.blinking){
+                    this.damage.play();
+                    this.player1.health--;
+                    this.player1.blinking = true;
+                    console.log(this.player1.health);
+                    setTimeout(function(){
+                        that.player1.blinking = false;
+                    }, 2000);
+                }
+                if(this.player1.health === 0){
+                    this.player1.alive = false;
+                    this.ctx.drawImage(this.gameOverImg, this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+                    let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+                    window.addEventListener('click', (e) => {
+                        if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+                            location.reload();
+                        }
+                    })
+                    this.paused = true;
+                    //game over screen try again?
             }
             // console.log(this.player1.health);
         }
     }
 
     winGame(){
-        if(this.between(this.player1.x, 5*this.currentX, 40*this.currentX) && this.between(this.player1.y, 808*this.currentY, 862*this.currentY)){
+        if(this.between(this.player1.x, 1*this.currentX, 20*this.currentX) && this.between(this.player1.y, 830*this.currentY, 930*this.currentY)){
             console.log("you win");
+            this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
+            let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+            window.addEventListener('click', (e) => {
+                if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+                    location.reload();
+                }
+            })
+            this.paused = true;
         }
     }
 
@@ -185,42 +220,73 @@ export default class Game {
     // }
     
     animate(){
-        setTimeout(() => {
-            requestAnimationFrame(this.animate.bind(this));
-        }, 1000 / 15);
-        // let now = Date.now();
-        // let elapsed = now - then;
-        // if(elapsed > fpsInterval){
-            // then = now - (elapsed % fpsInterval);
-            //clear canvas between each animation frame
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            //draws our background and where to start drawing from
-            this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
-                                                                                            //change these to change size of sprite
-            this.drawSprite(this.playerSprite, this.player1.width * this.player1.frameX, this.player1.height * this.player1.frameY, this.player1.width, 
-                this.player1.height, this.player1.x, this.player1.y, this.canvas.width/45, this.canvas.height/15);
-                                    //what to crop and where to start cropping from in sprite sheet
-            this.drawSprite(this.enemySprite, this.enemy1.width * this.enemy1.frameX, this.enemy1.height * this.enemy1.frameY, this.enemy1.width,
-                this.enemy1.height, this.enemy1.x, this.enemy1.y, this.canvas.width/45, this.canvas.height/15);
-            this.drawSprite(this.enemySprite, this.enemy2.width * this.enemy2.frameX, this.enemy2.height * this.enemy2.frameY, this.enemy2.width,
-                this.enemy2.height, this.enemy2.x, this.enemy2.y, this.canvas.width/45, this.canvas.height/15);
-            if(!this.music.paused){
-                this.ctx.drawImage(this.audioImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
-            }else{
-                this.ctx.drawImage(this.muteImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
-            }
-            if(this.player1.moving) this.walkSound.play();
-            this.player1.movePlayer(this.keys);
-            this.player1.moveSprite();
-            this.enemy1.moveEnemy(this.player1.x, this.player1.y);
-            this.enemy1.moveSprite();
-            this.enemy2.moveEnemy(this.player1.x, this.player1.y);
-            this.enemy2.moveSprite();
-            this.loseHealth();
-            this.winGame();
-        // }
-    }
+        if(!this.paused){
+            setTimeout(() => {
+                requestAnimationFrame(this.animate.bind(this));
+            }, 1000 / 15);
+            // let now = Date.now();
+            // let elapsed = now - then;
+            // if(elapsed > fpsInterval){
+                // then = now - (elapsed % fpsInterval);
+                //clear canvas between each animation frame
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                //draws our background and where to start drawing from
+                this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
+                                                                                                //change these to change size of sprite
+                this.drawSprite(this.playerSprite, this.player1.width * this.player1.frameX, this.player1.height * this.player1.frameY, this.player1.width, 
+                    this.player1.height, this.player1.x, this.player1.y, this.canvas.width/45, this.canvas.height/15);
+                                        //what to crop and where to start cropping from in sprite sheet
+                this.drawSprite(this.enemySprite, this.enemy1.width * this.enemy1.frameX, this.enemy1.height * this.enemy1.frameY, this.enemy1.width,
+                    this.enemy1.height, this.enemy1.x, this.enemy1.y, this.canvas.width/45, this.canvas.height/15);
 
+                this.drawSprite(this.enemySprite, this.enemy2.width * this.enemy2.frameX, this.enemy2.height * this.enemy2.frameY, this.enemy2.width,
+                    this.enemy2.height, this.enemy2.x, this.enemy2.y, this.canvas.width/45, this.canvas.height/15);
+
+                this.drawSprite(this.enemySprite, this.enemy3.width * this.enemy3.frameX, this.enemy3.height * this.enemy3.frameY, this.enemy3.width,
+                    this.enemy3.height, this.enemy3.x, this.enemy3.y, this.canvas.width/45, this.canvas.height/15);
+                
+                if(this.player1.health === 3){
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/10.5, this.canvas.width/50, this.canvas.height/30);
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/7, this.canvas.width/50, this.canvas.height/30);
+                }
+                if(this.player1.health === 2){
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/10.5, this.canvas.width/50, this.canvas.height/30);
+                }
+                if(this.player1.health === 1){
+                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
+                }
+
+                if(!this.music.paused){
+                    this.ctx.drawImage(this.audioImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
+                }else{
+                    this.ctx.drawImage(this.muteImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
+                }
+                if(this.player1.moving) this.walkSound.play();
+                setTimeout(function(){
+                    that.enemy1.froze = false;
+                }, 4000);
+                this.player1.movePlayer(this.keys);
+                this.player1.moveSprite();
+                if(!this.enemy1.froze) this.enemy1.moveEnemy(this.player1.x, this.player1.y);
+                if(!this.enemy1.froze) this.enemy1.moveSprite();
+                setTimeout(function(){
+                    that.enemy2.froze = false;
+                }, 4000);
+                if(!this.enemy2.froze) this.enemy2.moveEnemy(this.player1.x, this.player1.y);
+                if(!this.enemy2.froze) this.enemy2.moveSprite();
+                let that = this;
+                setTimeout(function(){
+                    that.enemy3.froze = false;
+                }, 20000);
+                if(!this.enemy3.froze) this.enemy3.moveEnemy(this.player1.x, this.player1.y);
+                if(!this.enemy3.froze) this.enemy3.moveSprite();
+                this.loseHealth();
+                this.winGame();
+            // }
+        }
+    }
 }
 
 
