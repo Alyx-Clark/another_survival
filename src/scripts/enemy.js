@@ -1,4 +1,4 @@
-export default class Player{
+export default class Enemy{
     constructor(canvas, x, y, width, height, scaleWidth, scaleHeight, frameX, frameY, speed, moving, score, health, obstacles){
         this.obstacles = obstacles;
         this.canvas = canvas
@@ -16,38 +16,36 @@ export default class Player{
         this.health = health;
     }
 
-    movePlayer(keys){
-        if(keys["w"] && this.y>0 && !keys["a"] && !keys["s"] && !keys["d"]){
+    between(x, min, max) {
+        return x >= min && x <= max;
+    }
+
+    moveEnemy(playerx, playery){
+        if(playery < this.y){
             this.moving = true; //had to put these in here to prevent animation of sprite on random key presses
-            this.frameY = 1;
+            this.frameY = 3;
             this.y -= this.speed;
             // scalePlayer.y -= this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
-        }else{
-            this.moving = false;
-        }
-        if(keys["a"] && this.x>2 && !keys["w"] && !keys["s"] && !keys["d"]){
+            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
+        }if(playerx < this.x){
             this.moving = true;
-            this.frameY = 2;
+            // this.frameY = 2;
             this.x -= this.speed;
             // scalePlayer.x -= this.speed; 
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed
-        }
-        if(keys["s"] && this.y<this.canvas.height-this.height && !keys["a"] && !keys["w"] && !keys["d"]){
+            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed;
+        }if(playery > this.y){
             this.moving = true;
             this.frameY = 0;
             this.y += this.speed;
             // scalePlayer.y += this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed
-        }
-        if(keys["d"] && this.x<this.canvas.width-this.width && !keys["a"] && !keys["s"] && !keys["w"]){
+            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed;
+        }if(playerx > this.x){
             this.moving = true;
-            this.frameY = 3;
+            // this.frameY = 3;
             this.x += this.speed;
             // scalePlayer.x += this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed
+            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed;
         }
-       
     }
 
     isColliding(callback, player, ...obstacles){

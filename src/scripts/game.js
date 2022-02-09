@@ -1,6 +1,6 @@
-import Player from "./playerFinal";
-import Enemy from "./enemyFinal";
-import Obstacle from "./obstacles.js";
+import Player from "./player";
+import Enemy from "./enemy";
+import Obstacle from "./obstacle.js";
 import Button from "./button.js";
 
 // // maybe can use for title screen music
@@ -22,8 +22,7 @@ export default class Game {
         this.currentX = this.canvas.width/this.scaleX;
         this.currentY = this.canvas.height/this.scaleY;
         this.keys = [];
-        this.enemy1 = new Enemy();
-        this.audioButton = new Button(2, 2, 2+(this.canvas.width/50), 2+(this.canvas.heigth/30));
+        this.audioButton = new Button(2, 2, 2+(this.canvas.width/50), 2+(this.canvas.height/30));
         this.music = document.createElement('audio');
         this.audioImg = new Image();
         this.muteImg = new Image();
@@ -32,15 +31,19 @@ export default class Game {
         this.enemySprite = new Image();
         this.background = new Image();
         this.loadInitialComponents();
-        this.player1 = new Player(this.canvas, 760*this.currentX, 580*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
-            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3, this.obstacles);
+        this.player1 = new Player(this.canvas, 100*this.currentX, 170*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
+            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 1, this.obstacles, true);
+        this.enemy1 = new Enemy(this.canvas, 760*this.currentX, 580*this.currentY, 64, 64, 32*this.currentX,
+            48*this.currentY, 0, 3, this.canvas.width/400, false, 0, 3, this.obstacles);
+        this.enemy2 = new Enemy(this.canvas, 500*this.currentX, 300*this.currentY, 64, 64, 32*this.currentX,
+            48*this.currentY, 0, 3, this.canvas.width/400, false, 0, 3, this.obstacles);
         this.registerEvents();
         this.animate();
     }
 
     loadInitialComponents(){
         this.background.src = "./images/zombiecity.png";
-        this.enemySprite.src = "./images/Ghoul.png";
+        this.enemySprite.src = "./images/ghost.png";
         this.playerSprite.src = "./images/player_sprite_resize.png";
         this.walkSound.src = "./sounds/walking.wav";
         this.walkSound.playbackRate = 12;
@@ -80,6 +83,9 @@ export default class Game {
         const sign = new Obstacle(1035*this.currentX, 235*this.currentY, 50*this.currentX, 1*this.currentY);
         const littleSign = new Obstacle(840*this.currentX, 820*this.currentY, 10*this.currentX, 1*this.currentY);
         const boxes = new Obstacle(1100*this.currentX, 785*this.currentY, 30*this.currentX, 1*this.currentY);
+        const littleGrave = new Obstacle(128*this.currentX, 495*this.currentY, 30*this.currentX, 1*this.currentY);
+        const wall = new Obstacle(509*this.currentX, 435*this.currentY, 140*this.currentX, 1*this.currentY);
+
         this.obstacles.push(house1);
         this.obstacles.push(house2);
         this.obstacles.push(house3);
@@ -106,6 +112,8 @@ export default class Game {
         this.obstacles.push(sign);
         this.obstacles.push(littleSign);
         this.obstacles.push(boxes);
+        this.obstacles.push(littleGrave);
+        this.obstacles.push(wall);
     }
 
     registerEvents(){
@@ -119,12 +127,15 @@ export default class Game {
             this.player1.moving = false;
         });
         window.addEventListener('click', (event) => {
-            console.log(event.x, event.y);
+            // console.log(event.x, event.y);
             this.player1.x = event.x;
             this.player1.y = event.y;
+            console.log(this.player1.x, this.player1.y);
+            console.log(this.enemy1.x, this.enemy1.y);
+            console.log(this.enemy2.x, this.enemy2.y);
             // scalePlayer.x = event.x;
             // scalePlayer.y = event.y;
-            console.log(this.canvas.width, this.canvas.height);
+            // console.log(this.canvas.width, this.canvas.height);
         })
         window.addEventListener('click', (e) => {
             if((e.x > this.audioButton.x && e.x < this.audioButton.endx) && (e.y > this.audioButton.y && e.y < this.audioButton.endy)){
@@ -137,6 +148,29 @@ export default class Game {
             }
         })
 
+    }
+
+    between(x, min, max) {
+        return x >= min && x <= max;
+    }
+
+    loseHealth(){
+        if((this.between(this.player1.x, this.enemy1.x-8, this.enemy1.x+8) && this.between(this.player1.y, this.enemy1.y-8, this.enemy1.y+8)) ||
+            (this.between(this.player1.x, this.enemy2.x-8, this.enemy2.x+8) && this.between(this.player1.y, this.enemy2.y-8, this.enemy2.y+8))){
+                this.player1.health--;
+            if(this.player1.health === 0){
+                this.player1.alive = false;
+                console.log("game over");
+                //game over screen try again?
+            }
+            // console.log(this.player1.health);
+        }
+    }
+
+    winGame(){
+        if(this.between(this.player1.x, 5*this.currentX, 40*this.currentX) && this.between(this.player1.y, 808*this.currentY, 862*this.currentY)){
+            console.log("you win");
+        }
     }
 
     drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
@@ -166,6 +200,10 @@ export default class Game {
             this.drawSprite(this.playerSprite, this.player1.width * this.player1.frameX, this.player1.height * this.player1.frameY, this.player1.width, 
                 this.player1.height, this.player1.x, this.player1.y, this.canvas.width/45, this.canvas.height/15);
                                     //what to crop and where to start cropping from in sprite sheet
+            this.drawSprite(this.enemySprite, this.enemy1.width * this.enemy1.frameX, this.enemy1.height * this.enemy1.frameY, this.enemy1.width,
+                this.enemy1.height, this.enemy1.x, this.enemy1.y, this.canvas.width/45, this.canvas.height/15);
+            this.drawSprite(this.enemySprite, this.enemy2.width * this.enemy2.frameX, this.enemy2.height * this.enemy2.frameY, this.enemy2.width,
+                this.enemy2.height, this.enemy2.x, this.enemy2.y, this.canvas.width/45, this.canvas.height/15);
             if(!this.music.paused){
                 this.ctx.drawImage(this.audioImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
             }else{
@@ -174,6 +212,12 @@ export default class Game {
             if(this.player1.moving) this.walkSound.play();
             this.player1.movePlayer(this.keys);
             this.player1.moveSprite();
+            this.enemy1.moveEnemy(this.player1.x, this.player1.y);
+            this.enemy1.moveSprite();
+            this.enemy2.moveEnemy(this.player1.x, this.player1.y);
+            this.enemy2.moveSprite();
+            this.loseHealth();
+            this.winGame();
         // }
     }
 

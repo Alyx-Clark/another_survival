@@ -5,3 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 
+// style='display:none'
+
+// function startGame(){
+//     console.log("start game");
+// }
