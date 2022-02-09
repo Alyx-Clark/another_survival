@@ -46,7 +46,6 @@ export default class Game {
             48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
         this.registerEvents();
         this.animate();
-        this.playGame();
     }
 
     loadInitialComponents(){
@@ -131,7 +130,7 @@ export default class Game {
     registerEvents(){
         window.addEventListener("keydown", (e) => {
             this.keys[e.key] = true;
-            console.log(e.key);
+            // console.log(e.key);
         });
         
         window.addEventListener("keyup", (e) => {
@@ -173,10 +172,10 @@ export default class Game {
                     this.damage.play();
                     this.player1.health--;
                     this.player1.blinking = true;
-                    console.log(this.player1.health);
+                    // console.log(this.player1.health);
                     setTimeout(function(){
                         that.player1.blinking = false;
-                    }, 2000);
+                    }, 1500);
                 }
                 if(this.player1.health === 0){
                     this.player1.alive = false;
@@ -196,7 +195,7 @@ export default class Game {
 
     winGame(){
         if(this.between(this.player1.x, 1*this.currentX, 20*this.currentX) && this.between(this.player1.y, 830*this.currentY, 930*this.currentY)){
-            console.log("you win");
+            // console.log("you win");
             this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
             let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
             window.addEventListener('click', (e) => {
@@ -206,6 +205,10 @@ export default class Game {
             })
             this.paused = true;
         }
+    }
+
+    startGame(){
+        console.log("hello");
     }
 
     drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
