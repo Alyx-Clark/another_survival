@@ -21,6 +21,9 @@ In addition, this project will include:
 
 ## Title Screen
  The game has a title screen that gives a brief overview and directions. The player can click at anytime to start the game. Music is muted by default and a player can unmute when in game. Links to my socials will also be available on the screen.
+ 
+ ![image](https://user-images.githubusercontent.com/78308893/153477363-247104e0-b198-4b67-ac2f-4a3710299db2.png)
+
 
 ## Wireframe
 
