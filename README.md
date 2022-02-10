@@ -1,20 +1,26 @@
-# Another Survival
-Another survival is an interactive survival game that combines third-person overhead perspective, pixel art, and survival gameplay. The player has woken up to a zombie appocalypse and must fight their way out to avoid becoming one of the undead. Will you make it out alive?
+# <div align='center'> <img width="589" alt="game title" src="https://user-images.githubusercontent.com/78308893/153425729-2cb185f2-24cc-4471-8ef8-f481f09704e6.png"> </div>
 
-[Live Demo](https://Alyx-Clark.github.io/another_survival/)
+
+
+# Another Survival
+Another survival is an interactive survival game that combines third-person overhead perspective, pixel art, and survival gameplay. The player has wandered into a ghost town and must find their way out to avoid becoming one of the spirits. 
+It is a single player game where the player only has 3 hearts. Getting hit will cause a player to lose a heart. Will you make it out alive?
+
+Try my game out! [Live Demo](https://Alyx-Clark.github.io/another_survival/)
 
 ## Functionality & MVPs
-
 With Another Survival, users will be able to:
 * Play a new game
 * Turn on/off sound and music
 * Use the wasd keys to move and the space key to attack
 
-
 In addition, this project will include:
 
 * Instructions showing a user how to play the game
 * A production README
+
+## Title Screen
+ The game has a title screen that gives a brief overview and directions. The player can click at anytime to start the game. Music is muted by default and a player can unmute when in game. Links to my socials will also be available on the screen.
 
 ## Wireframe
 
@@ -35,13 +41,9 @@ This project will be implemented with the following technologies:
 ## Implementation Timeline
 
 * Friday Afternoon & Weekend: compile research, setup project, begin skeleton rough draft, get comfortable with the APIs I'll be using, and sketch out the artworks for the game. Render the background images and map to the screen and have all sprites ready to be implemented.
-
 * Monday: Implement the underlying logic of the game and functionality. Be able to have the player move about the screen and be restricted to certain areas.
-
 * Tuesday: Add the attack ability to the player and the health system.
-
 * Wednesday: Add an enemies to hurt the player and any last minute styling.
-
 * Thursday Morning: Submit project.
 
 ## About
