@@ -61,18 +61,8 @@ footer.social-links {
   text-align: center;
 }
 
-.social-links h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
 .social-links h2 {
   font-size: 20px;
-}
-
-.social-links h3 {
-  margin-top: 10px;
-  font-size: 16px;
 }
 
 .move-keys {
@@ -89,6 +79,8 @@ footer.social-links {
 #directions h2 {
   font-family: Horror;
   font-size: 8em;
+  margin: 0px 15px;
+  text-align: center;
 }
 
 .canvas-wrap {
@@ -110,8 +102,9 @@ footer.social-links {
 
 #directions p {
   font-size: 30px;
-  width: 350px;
+  margin: 0px 15px;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .canvas-wrap h1 {
