@@ -1,4 +1,4 @@
-# <div align='center'> <img width="589" alt="game title" src="![image](https://user-images.githubusercontent.com/78308893/153425729-2cb185f2-24cc-4471-8ef8-f481f09704e6.png)"> </div>
+# <div align='center'> <img width="589" alt="game title" src="https://user-images.githubusercontent.com/78308893/153425729-2cb185f2-24cc-4471-8ef8-f481f09704e6.png"> </div>
 
 
 
