@@ -36,6 +36,7 @@ export default class Game {
         this.enemySprite = new Image();
         this.background = new Image();
         this.gameOverImg = new Image();
+        this.counter = 0;
         this.winImg = new Image();
         this.paused = false;
         this.loadInitialComponents();
@@ -157,9 +158,12 @@ export default class Game {
 
     title(){
         this.a = document.getElementById("canvas1").style.display = "none";
-        window.addEventListener('click', (e) => {
-            document.getElementById("title").style.display = "none"
-            this.a = document.getElementById("canvas1").style.display="block"
+        const playButton = document.getElementById("button1");
+        playButton.addEventListener('click', (e) => {
+            if(e){
+                document.getElementById("title").style.display = "none"
+                this.a = document.getElementById("canvas1").style.display="block"
+            }
         })
     }
 
@@ -224,6 +228,7 @@ export default class Game {
                 requestAnimationFrame(this.animate.bind(this));
             }, 1000 / 15);
             if(!this.paused && this.a !== "none" ){
+                if(this.counter<5) this.counter++;
             // let now = Date.now();
             // let elapsed = now - then;
             // if(elapsed > fpsInterval){
@@ -264,22 +269,25 @@ export default class Game {
                     this.ctx.drawImage(this.muteImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
                 }
                 if(this.player1.moving) this.walkSound.play();
-                setTimeout(function(){
-                    that.enemy1.froze = false;
-                }, 4000);
+                if(this.counter > 1){
+                    setTimeout(function(){
+                that.enemy1.froze = false;
+                }, 4000);}
                 this.player1.movePlayer(this.keys);
                 this.player1.moveSprite();
                 if(!this.enemy1.froze) this.enemy1.moveEnemy(this.player1.x, this.player1.y);
                 if(!this.enemy1.froze) this.enemy1.moveSprite();
-                setTimeout(function(){
+                if(this.counter > 1){
+                    setTimeout(function(){
                     that.enemy2.froze = false;
-                }, 4000);
+                }, 4000);}
                 if(!this.enemy2.froze) this.enemy2.moveEnemy(this.player1.x, this.player1.y);
                 if(!this.enemy2.froze) this.enemy2.moveSprite();
                 let that = this;
-                setTimeout(function(){
+                if(this.counter > 1){
+                    setTimeout(function(){
                     that.enemy3.froze = false;
-                }, 20000);
+                }, 20000);}
                 if(!this.enemy3.froze) this.enemy3.moveEnemy(this.player1.x, this.player1.y);
                 if(!this.enemy3.froze) this.enemy3.moveSprite();
                 this.loseHealth();

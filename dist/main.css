@@ -47,8 +47,6 @@ footer.social-links {
   background-color: wheat;
   border-radius: 10px;
   display: flex;
-  margin-top: 50px;
-  margin-left: 10px;
   width: 200px;
   flex-direction: column;
   justify-content: center;
@@ -73,14 +71,22 @@ footer.social-links {
 .social-logo {
   width: 50px;
   min-height: 50px;
-  margin: 20px;
 }
 
 #directions h2 {
   font-family: Horror;
   font-size: 8em;
-  margin: 0px 15px;
   text-align: center;
+}
+
+button {
+  border: 5px solid black;
+  color: black;
+  background-color: darkolivegreen;
+  font-family: Horror;
+  border-radius: 10px;
+  font-size: 6em;
+  cursor: pointer;
 }
 
 .canvas-wrap {
