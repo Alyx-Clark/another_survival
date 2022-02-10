@@ -31,7 +31,50 @@ This is the main area of game play after the title screen. The user will have th
 
 ![image](https://user-images.githubusercontent.com/78308893/153429974-ef99ae76-3522-451a-90b3-4eeed1469378.png)
 
-## Code
+## Code Snippet
+One of the most fundemental parts of Another Survival is player movement. Below is the movePlayer function that allows a player to move based on the input of the wasd keys.
+An array of keys is passed into the movePlayer function so the game can keep track of what keys are pressed. An event listener will add and remove the keys from the array
+upon press and release. The if conditional also prevents the user from pressing multiple keys at a time, this prevents unwanted movement behavior. The moving variable is 
+a boolean value deciding whether to animate the sprite or not. The isColliding function consumed a majority of development time. Each object on the map is saved as an
+obstacle with postions values. The function will check the players postion and objects position and decide if they are colliding. If true movement will be prevented.
+
+```javascript
+
+movePlayer(keys){
+        if(keys["w"] && this.y>0 && !keys["a"] && !keys["s"] && !keys["d"]){
+            this.moving = true; //had to put these in here to prevent animation of sprite on random key presses
+            this.frameY = 1;
+            this.y -= this.speed;
+            // scalePlayer.y -= this.speed;
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
+        }else{
+            this.moving = false;
+        }
+        if(keys["a"] && this.x>2 && !keys["w"] && !keys["s"] && !keys["d"]){
+            this.moving = true;
+            this.frameY = 2;
+            this.x -= this.speed;
+            // scalePlayer.x -= this.speed; 
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed
+        }
+        if(keys["s"] && this.y<this.canvas.height-this.height && !keys["a"] && !keys["w"] && !keys["d"]){
+            this.moving = true;
+            this.frameY = 0;
+            this.y += this.speed;
+            // scalePlayer.y += this.speed;
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed
+        }
+        if(keys["d"] && this.x<this.canvas.width-this.width && !keys["a"] && !keys["s"] && !keys["w"]){
+            this.moving = true;
+            this.frameY = 3;
+            this.x += this.speed;
+            // scalePlayer.x += this.speed;
+            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed
+        }
+       
+    }
+
+```
 
 ## Technologies, Libraries, APIs
 This project will be implemented with the following technologies:
