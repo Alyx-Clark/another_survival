@@ -38,13 +38,9 @@ This project will be implemented with the following technologies:
 ## Implementation Timeline
 
 * Friday Afternoon & Weekend: compile research, setup project, begin skeleton rough draft, get comfortable with the APIs I'll be using, and sketch out the artworks for the game. Render the background images and map to the screen and have all sprites ready to be implemented.
-
 * Monday: Implement the underlying logic of the game and functionality. Be able to have the player move about the screen and be restricted to certain areas.
-
 * Tuesday: Add the attack ability to the player and the health system.
-
 * Wednesday: Add an enemies to hurt the player and any last minute styling.
-
 * Thursday Morning: Submit project.
 
 ## About
