@@ -20,6 +20,7 @@ In addition, this project will include:
 * A production README
 
 ## Title Screen
+
  The game has a title screen that gives a brief overview and directions. The player can click at anytime to start the game. Music is muted by default and a player can unmute when in game. Links to my socials will also be available on the screen.
 
 ## Wireframe
@@ -28,6 +29,7 @@ In addition, this project will include:
 ![Wireframe](https://user-images.githubusercontent.com/78308893/152541077-de40a2bb-8290-4b6b-9341-846eb8c5ab9b.png)
 
 ## Play Screen
+
 This is the main area of game play after the title screen. The user will have the option to unmute music in the top left corner along with seeing how many hearts they have left.
 ![image](https://user-images.githubusercontent.com/78308893/153429974-ef99ae76-3522-451a-90b3-4eeed1469378.png)
 
