@@ -19,6 +19,9 @@ In addition, this project will include:
 * Instructions showing a user how to play the game
 * A production README
 
+## Title Screen
+ The game has a title screen that gives a brief overview and directions. The player can click at anytime to start the game. Music is muted by default and a player can unmute when in game. Links to my socials will also be available on the screen.
+
 ## Wireframe
 
 
