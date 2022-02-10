@@ -22,10 +22,6 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-body {
-  line-height: 1;
-}
-
 ol, ul {
   list-style: none;
 }
@@ -34,11 +30,10 @@ blockquote, q {
   quotes: none;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+@font-face {
+  font-family: "Horror";
+  src: url("../images/horror.ttf") format("opentype");
 }
-
 body {
   margin: 0;
   padding: 0;
@@ -51,10 +46,10 @@ footer.social-links {
   border: 1px solid darkseagreen;
   background-color: wheat;
   border-radius: 10px;
+  display: flex;
   margin-top: 50px;
   margin-left: 10px;
   width: 200px;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -81,8 +76,8 @@ footer.social-links {
 }
 
 .move-keys {
-  max-width: 105px;
-  max-height: 90px;
+  max-width: 70px;
+  max-height: 70px;
 }
 
 .social-logo {
@@ -91,14 +86,37 @@ footer.social-links {
   margin: 20px;
 }
 
+#directions h2 {
+  font-family: Horror;
+  font-size: 8em;
+}
+
 .canvas-wrap {
   width: auto;
 }
 
-#start-instructions {
-  width: inherit;
-  color: white;
-  position: absolute;
-  top: 373px;
-  margin-left: 35px;
+#directions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  width: 600px;
+  max-height: 430;
+  padding: 0 4vw;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  position: relative;
+}
+
+#directions p {
+  font-size: 30px;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.canvas-wrap h1 {
+  font-size: 12em;
+  margin: 0px 15px;
+  text-align: center;
+  font-family: Horror;
 }
