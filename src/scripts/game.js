@@ -158,6 +158,7 @@ export default class Game {
 
     title(){
         this.a = document.getElementById("canvas1").style.display = "none";
+        document.getElementById("death-center").style.display="none";
         const playButton = document.getElementById("button1");
         playButton.addEventListener('click', (e) => {
             if(e){
@@ -186,12 +187,17 @@ export default class Game {
                 }
                 if(this.player1.health === 0){
                     this.player1.alive = false;
-                    this.ctx.drawImage(this.gameOverImg, this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
-                    let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
-                    window.addEventListener('click', (e) => {
-                        if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+                    document.getElementById("death-center").style.display="flex"
+                    const menuButton = document.getElementById("button2");
+                    // this.ctx.drawImage(this.gameOverImg, this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+                    // let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+                    menuButton.addEventListener('click', (e) => {
+                        if(e){
                             location.reload();
                         }
+                        // if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+                        //     location.reload();
+                        // }
                     })
                     this.paused = true;
             }

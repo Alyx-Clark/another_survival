@@ -64,8 +64,8 @@ footer.social-links {
 }
 
 .move-keys {
-  max-width: 70px;
-  max-height: 70px;
+  max-width: 90px;
+  max-height: 90px;
 }
 
 .social-logo {
@@ -79,7 +79,7 @@ footer.social-links {
   text-align: center;
 }
 
-button {
+#button1 {
   border: 5px solid black;
   color: black;
   background-color: darkolivegreen;
@@ -87,6 +87,52 @@ button {
   border-radius: 10px;
   font-size: 6em;
   cursor: pointer;
+}
+
+#button2 {
+  border: 5px solid black;
+  color: black;
+  background-color: darkolivegreen;
+  font-family: Horror;
+  border-radius: 10px;
+  font-size: 4em;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  margin-top: 50px;
+}
+
+#change {
+  height: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#death p {
+  font-family: Horror;
+  font-size: 5em;
+}
+
+#death h1 {
+  font-family: Horror;
+  font-size: 6em;
+  text-align: center;
+}
+
+#death-center {
+  height: 100%;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+}
+
+#death {
+  margin-bottom: 50px;
+  border: 5px solid black;
+  color: black;
+  background-color: darkolivegreen;
+  align-self: center;
 }
 
 .canvas-wrap {
