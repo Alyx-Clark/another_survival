@@ -195,7 +195,7 @@ export default class Game {
     }
 
     winGame(){
-        if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 830*this.currentY, 930*this.currentY)){
+        if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 800*this.currentY, 930*this.currentY)){
             // console.log("you win");
             this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
             let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
