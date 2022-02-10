@@ -31,7 +31,7 @@ In addition, this project will include:
 This is the main area of game play after the title screen. The user will have the option to unmute music in the top left corner along with seeing how many hearts they have left.
 ![image](https://user-images.githubusercontent.com/78308893/153429974-ef99ae76-3522-451a-90b3-4eeed1469378.png)
 
-
+## Code
 
 ## Technologies, Libraries, APIs
 This project will be implemented with the following technologies:
