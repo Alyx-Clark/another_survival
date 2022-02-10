@@ -9,12 +9,10 @@ It is a single player game where the player only has 3 hearts. Getting hit will 
 Try my game out! [Live Demo](https://Alyx-Clark.github.io/another_survival/)
 
 ## Functionality & MVPs
-
 With Another Survival, users will be able to:
 * Play a new game
 * Turn on/off sound and music
 * Use the wasd keys to move and the space key to attack
-
 
 In addition, this project will include:
 
