@@ -9,6 +9,8 @@ import Button from "./button.js";
 // music.play();
 
 
+
+
 export default class Game {
     constructor(){
         this.canvas = document.getElementById("canvas1");
@@ -17,6 +19,7 @@ export default class Game {
         this.canvas.height = window.innerHeight;
         document.body.scrollTop = 0;
         document.body.style.overflow = 'hidden';
+        this.a = document.getElementById("canvas1").style.display="block";
         this.scaleX = 1503;
         this.scaleY = 947;
         this.currentX = this.canvas.width/this.scaleX;
@@ -46,6 +49,7 @@ export default class Game {
             48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
         this.registerEvents();
         this.animate();
+        this.title();
     }
 
     loadInitialComponents(){
@@ -137,15 +141,7 @@ export default class Game {
             delete this.keys[e.key];
             this.player1.moving = false;
         });
-        window.addEventListener('click', (event) => {
-            // console.log(event.x, event.y);
-            // this.player1.x = event.x;
-            // this.player1.y = event.y;
-            // console.log(this.player1.x, this.player1.y);
-            // scalePlayer.x = event.x;
-            // scalePlayer.y = event.y;
-            // console.log(this.canvas.width, this.canvas.height);
-        })
+        
         window.addEventListener('click', (e) => {
             if((e.x > this.audioButton.x && e.x < this.audioButton.endx) && (e.y > this.audioButton.y && e.y < this.audioButton.endy)){
                 if(this.music.paused){
@@ -157,6 +153,14 @@ export default class Game {
             }
         })
 
+    }
+
+    title(){
+        this.a = document.getElementById("canvas1").style.display = "none";
+        window.addEventListener('click', (e) => {
+            document.getElementById("title").style.display = "none"
+            this.a = document.getElementById("canvas1").style.display="block"
+        })
     }
 
     between(x, min, max) {
@@ -172,7 +176,6 @@ export default class Game {
                     this.damage.play();
                     this.player1.health--;
                     this.player1.blinking = true;
-                    // console.log(this.player1.health);
                     setTimeout(function(){
                         that.player1.blinking = false;
                     }, 1500);
@@ -187,14 +190,12 @@ export default class Game {
                         }
                     })
                     this.paused = true;
-                    //game over screen try again?
             }
-            // console.log(this.player1.health);
         }
     }
 
     winGame(){
-        if(this.between(this.player1.x, 1*this.currentX, 20*this.currentX) && this.between(this.player1.y, 830*this.currentY, 930*this.currentY)){
+        if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 830*this.currentY, 930*this.currentY)){
             // console.log("you win");
             this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
             let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
@@ -205,10 +206,6 @@ export default class Game {
             })
             this.paused = true;
         }
-    }
-
-    startGame(){
-        console.log("hello");
     }
 
     drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
@@ -223,10 +220,10 @@ export default class Game {
     // }
     
     animate(){
-        if(!this.paused){
             setTimeout(() => {
                 requestAnimationFrame(this.animate.bind(this));
             }, 1000 / 15);
+            if(!this.paused && this.a !== "none" ){
             // let now = Date.now();
             // let elapsed = now - then;
             // if(elapsed > fpsInterval){
@@ -291,5 +288,6 @@ export default class Game {
         }
     }
 }
+
 
 

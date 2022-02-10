@@ -1,0 +1,100 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: darkolivegreen;
+}
+
+
+footer.social-links{
+    border: 1px solid darkseagreen;
+    background-color: wheat;
+    border-radius: 10px;
+    margin-top: 50px;
+    margin-left: 10px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-links{
+    font-family: sans-serif;
+    font-weight: 600;
+    text-align: center;
+}
+
+.social-links h1{
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.social-links h2{
+    font-size: 20px;
+}
+
+.social-links h3{
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.move-keys{
+    max-width: 105px;
+    max-height: 90px;
+}
+
+.social-logo{
+    width: 50px;
+    min-height: 50px;
+    margin: 20px;
+}
+
+.canvas-wrap{
+    width: auto;
+}
+
+#start-instructions{
+    width: inherit;
+    color: white;
+    position: absolute;
+    top: 373px;
+    margin-left: 35px;
+}
