@@ -159,6 +159,7 @@ export default class Game {
     title(){
         this.a = document.getElementById("canvas1").style.display = "none";
         document.getElementById("death-center").style.display="none";
+        document.getElementById("survive-center").style.display="none";
         const playButton = document.getElementById("button1");
         playButton.addEventListener('click', (e) => {
             if(e){
@@ -207,12 +208,17 @@ export default class Game {
     winGame(){
         if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 800*this.currentY, 930*this.currentY)){
             // console.log("you win");
-            this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
-            let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
-            window.addEventListener('click', (e) => {
-                if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+            // this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
+            // let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
+            document.getElementById("survive-center").style.display="flex"
+            const winMenuButton = document.getElementById("button3");
+            winMenuButton.addEventListener('click', (e) => {
+                if(e){
                     location.reload();
                 }
+                // if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
+                //     location.reload();
+                // }
             })
             this.paused = true;
         }

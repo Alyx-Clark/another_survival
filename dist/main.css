@@ -102,7 +102,27 @@ footer.social-links {
   margin-top: 50px;
 }
 
+#button3 {
+  border: 5px solid black;
+  color: black;
+  background-color: darkolivegreen;
+  font-family: Horror;
+  border-radius: 10px;
+  font-size: 4em;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  margin-top: 50px;
+}
+
 #change {
+  height: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#change-survive {
   height: 10px;
   width: 100%;
   display: flex;
@@ -114,7 +134,18 @@ footer.social-links {
   font-size: 5em;
 }
 
+#survive p {
+  font-family: Horror;
+  font-size: 5em;
+}
+
 #death h1 {
+  font-family: Horror;
+  font-size: 6em;
+  text-align: center;
+}
+
+#survive h1 {
   font-family: Horror;
   font-size: 6em;
   text-align: center;
@@ -127,7 +158,22 @@ footer.social-links {
   display: flex;
 }
 
+#survive-center {
+  height: 100%;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+}
+
 #death {
+  margin-bottom: 50px;
+  border: 5px solid black;
+  color: black;
+  background-color: darkolivegreen;
+  align-self: center;
+}
+
+#survive {
   margin-bottom: 50px;
   border: 5px solid black;
   color: black;
