@@ -3,27 +3,5 @@ body {
     padding: 0;
 }
 
-/* .canvas { */
-    /* image-rendering: pixelated; */
-    /* width: calc(1vw + 1vh + 124vmin); */
-    /* height: calc(1vw + 1vh + 79vmin);  */
-    /* background-color: rgb(0, 0, 0); */
-/* } */
-
-/* 
-
-footer.social-links {
-    border: 1px solid $medium-lavendar;
-    background-color: $medium-lavendar;
-    border-radius: 10px;
-    margin-top: 50px;
-    margin-left: 10px;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
-
 
 

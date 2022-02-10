@@ -26,25 +26,21 @@ export default class Enemy{
             this.moving = true; //had to put these in here to prevent animation of sprite on random key presses
             this.frameY = 3;
             this.y -= this.speed;
-            // scalePlayer.y -= this.speed;
             // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
         }if(playerx < this.x){
             this.moving = true;
             // this.frameY = 2;
             this.x -= this.speed;
-            // scalePlayer.x -= this.speed; 
             // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed;
         }if(playery > this.y){
             this.moving = true;
             this.frameY = 0;
             this.y += this.speed;
-            // scalePlayer.y += this.speed;
             // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed;
         }if(playerx > this.x){
             this.moving = true;
             // this.frameY = 3;
             this.x += this.speed;
-            // scalePlayer.x += this.speed;
             // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed;
         }
     }

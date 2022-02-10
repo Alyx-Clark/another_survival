@@ -3,10 +3,6 @@ import Enemy from "./enemy";
 import Obstacle from "./obstacle.js";
 import Button from "./button.js";
 
-// // maybe can use for title screen music
-// const music = document.createElement('audio');
-// music.src = "./sounds/Dungeon-Crawler"
-// music.play();
 
 
 
@@ -135,7 +131,6 @@ export default class Game {
     registerEvents(){
         window.addEventListener("keydown", (e) => {
             this.keys[e.key] = true;
-            // console.log(e.key);
         });
         
         window.addEventListener("keyup", (e) => {
@@ -190,15 +185,10 @@ export default class Game {
                     this.player1.alive = false;
                     document.getElementById("death-center").style.display="flex"
                     const menuButton = document.getElementById("button2");
-                    // this.ctx.drawImage(this.gameOverImg, this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
-                    // let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
                     menuButton.addEventListener('click', (e) => {
                         if(e){
                             location.reload();
                         }
-                        // if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
-                        //     location.reload();
-                        // }
                     })
                     this.paused = true;
             }
@@ -207,18 +197,12 @@ export default class Game {
 
     winGame(){
         if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 800*this.currentY, 930*this.currentY)){
-            // console.log("you win");
-            // this.ctx.drawImage(this.winImg, this.canvas.width/4, this.canvas.height/4, this.canvas.width/3, this.canvas.height/3);
-            // let over = new Button(this.canvas.width/7, this.canvas.height/7, this.canvas.width/2, this.canvas.height/2);
             document.getElementById("survive-center").style.display="flex"
             const winMenuButton = document.getElementById("button3");
             winMenuButton.addEventListener('click', (e) => {
                 if(e){
                     location.reload();
                 }
-                // if((e.x > this.canvas.width/4 && e.x < this.canvas.width/1.75) && (e.y > this.canvas.height/4 && e.y < this.canvas.height/1.75)){
-                //     location.reload();
-                // }
             })
             this.paused = true;
         }
@@ -227,13 +211,6 @@ export default class Game {
     drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
         this.ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
     }
-
-    // startAnimating(fps){
-    //     let fpsInterval = 1000/fps;
-    //     let then = Date.now();
-    //     let startTime = then;
-    //     this.animate(then, fpsInterval);
-    // }
     
     animate(){
             setTimeout(() => {
@@ -241,10 +218,6 @@ export default class Game {
             }, 1000 / 15);
             if(!this.paused && this.a !== "none" ){
                 if(this.counter<5) this.counter++;
-            // let now = Date.now();
-            // let elapsed = now - then;
-            // if(elapsed > fpsInterval){
-                // then = now - (elapsed % fpsInterval);
                 //clear canvas between each animation frame
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 //draws our background and where to start drawing from

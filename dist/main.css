@@ -189,7 +189,6 @@ footer.social-links {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
   width: 600px;
   max-height: 430;
   padding: 0 4vw;
