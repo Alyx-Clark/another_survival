@@ -1,3 +1,7 @@
+# <div align='center'> <img width="589" alt="game title" src="![image](https://user-images.githubusercontent.com/78308893/153425729-2cb185f2-24cc-4471-8ef8-f481f09704e6.png)"> </div>
+
+
+
 # Another Survival
 Another survival is an interactive survival game that combines third-person overhead perspective, pixel art, and survival gameplay. The player has woken up to a zombie appocalypse and must fight their way out to avoid becoming one of the undead. Will you make it out alive?
 
