@@ -37,35 +37,72 @@ body {
     display: flex;
     justify-content: center;
     background-color: darkolivegreen;
+    // background-color: orange;
 }
 
-
-footer.social-links{
-    border: 1px solid darkseagreen;
-    background-color: wheat;
-    border-radius: 10px;
-    display: flex;
-    width: 200px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
 
 .social-links{
+    background-color: wheat;
+    height: 16rem;
+    width: 9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    border-radius: 1rem;
+}
+
+.social-links h1 {
     font-family: sans-serif;
     font-weight: 600;
-    text-align: center;
+}
+
+.social-links h2 {
+    font-family: sans-serif;
+    font-weight: 600;
+}
+
+.social{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.social h3 {
+    font-family: sans-serif;
+    font-weight: 600;
 }
 
 
-.social-links h2{
-    font-size: 20px;
-}
+// .social-links{
+//     border: 1px solid darkseagreen;
+//     background-color: wheat;
+//     border-radius: 10px;
+//     display: flex;
+//     width: 200px;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+// }
+
+
+// .social-links{
+//     font-family: sans-serif;
+//     font-weight: 600;
+//     text-align: center;
+// }
+
+
+// .social-links h2{
+//     font-size: 20px;
+// }
 
 .move-keys{
-    max-width: 90px;
-    max-height: 90px;
+    max-width: 6rem;
+    max-height: 4rem;
 }
 
 .social-logo{
@@ -120,6 +157,23 @@ footer.social-links{
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+#button12{
+    display: flex;
+    position: absolute;
+    margin-top: 2px;
+    left: 3%;
+    height: 2.5rem;
+    width: 5rem;
+    background-color: darkolivegreen;
+    color: black;
+    font-family: sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 1rem;
 }
 
 #change-survive{

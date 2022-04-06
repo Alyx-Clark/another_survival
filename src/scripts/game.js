@@ -153,13 +153,22 @@ export default class Game {
 
     title(){
         this.a = document.getElementById("canvas1").style.display = "none";
+        document.getElementById("button12").style.display="none"
         document.getElementById("death-center").style.display="none";
         document.getElementById("survive-center").style.display="none";
         const playButton = document.getElementById("button1");
         playButton.addEventListener('click', (e) => {
             if(e){
-                document.getElementById("title").style.display = "none"
-                this.a = document.getElementById("canvas1").style.display="block"
+                document.getElementById("title").style.display = "none";
+                document.getElementById("title2").style.display = "none";
+                document.getElementById("button12").style.display = "flex";
+                const menus = document.getElementById("button12");
+                menus.addEventListener('click', (e) => {
+                    if(e){
+                        location.reload();
+                    }
+                })
+                this.a = document.getElementById("canvas1").style.display="block";
             }
         })
     }
@@ -174,7 +183,7 @@ export default class Game {
             (this.between(this.player1.x, this.enemy2.x-25, this.enemy2.x+25) && this.between(this.player1.y, this.enemy2.y-25, this.enemy2.y+25)) ||
             (this.between(this.player1.x, this.enemy3.x-25, this.enemy3.x+25) && this.between(this.player1.y, this.enemy3.y-25, this.enemy3.y+25))){
                 if(!this.player1.blinking){
-                    this.damage.play();
+                    !this.music.paused ? this.damage.play() : null;
                     this.player1.health--;
                     this.player1.blinking = true;
                     setTimeout(function(){
@@ -253,7 +262,7 @@ export default class Game {
                 }else{
                     this.ctx.drawImage(this.muteImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
                 }
-                if(this.player1.moving) this.walkSound.play();
+                if(this.player1.moving && !this.music.paused) this.walkSound.play();
                 if(this.counter > 1){
                     setTimeout(function(){
                 that.enemy1.froze = false;
