@@ -6,7 +6,7 @@
 Another Survival is an interactive survival game that combines third-person overhead perspective, pixel art, and survival gameplay. The player has wandered into a ghost town and must find their way out to avoid becoming one of the spirits. 
 It is a single player game where the player only has 3 hearts. Getting hit will cause a player to lose a heart. Will you make it out alive?
 
-Try my game out! [Live Demo](https://Alyx-Clark.github.io/another_survival/)
+Try my game out! [Live Demo](https://owlex.dev/another-survival)
 
 ## Functionality & MVPs
 With Another Survival, users will be able to:
