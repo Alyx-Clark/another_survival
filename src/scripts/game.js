@@ -35,6 +35,7 @@ export default class Game {
         this.counter = 0;
         this.winImg = new Image();
         this.paused = false;
+        this.assetBasePath = window.location.pathname.startsWith("/another-survival") ? "/another-survival" : ".";
         this.loadInitialComponents();
         this.player1 = new Player(this.canvas, 100*this.currentX, 170*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
             68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3, this.obstacles, true, false);
@@ -50,18 +51,18 @@ export default class Game {
     }
 
     loadInitialComponents(){
-        this.background.src = "./images/zombiecity.png";
-        this.enemySprite.src = "./images/ghost.png";
-        this.playerSprite.src = "./images/player_sprite_resize.png";
-        this.walkSound.src = "./sounds/walking.wav";
+        this.background.src = this.assetPath("images/zombiecity.png");
+        this.enemySprite.src = this.assetPath("images/ghost.png");
+        this.playerSprite.src = this.assetPath("images/player_sprite_resize.png");
+        this.walkSound.src = this.assetPath("sounds/walking.wav");
         this.walkSound.playbackRate = 12;
-        this.muteImg.src = "./images/muteButton.png"
-        this.music.src = "./sounds/Haunted_Swamp.wav";
-        this.audioImg.src = "./images/soundButton.png";
-        this.gameOverImg.src = "./images/game-over.png";
-        this.damage.src = "./sounds/hit.wav";
-        this.heart.src = "./images/heart.png";
-        this.winImg.src = "./images/win.png";
+        this.muteImg.src = this.assetPath("images/muteButton.png")
+        this.music.src = this.assetPath("sounds/Haunted_Swamp.wav");
+        this.audioImg.src = this.assetPath("images/soundButton.png");
+        this.gameOverImg.src = this.assetPath("images/game-over.png");
+        this.damage.src = this.assetPath("sounds/hit.wav");
+        this.heart.src = this.assetPath("images/heart.png");
+        this.winImg.src = this.assetPath("images/win.png");
         this.obstacles = [];
         const house1 = new Obstacle(190*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
         const house2 = new Obstacle(395*this.currentX, 30*this.currentY, 145*this.currentX, 110*this.currentY);
@@ -126,6 +127,11 @@ export default class Game {
         this.obstacles.push(boxes);
         this.obstacles.push(littleGrave);
         this.obstacles.push(wall);
+    }
+
+    assetPath(path){
+        if (this.assetBasePath === ".") return `./${path}`;
+        return `${this.assetBasePath}/${path}`;
     }
 
     registerEvents(){
@@ -290,6 +296,5 @@ export default class Game {
         }
     }
 }
-
 
 
