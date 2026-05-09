@@ -18,34 +18,49 @@ export default class Player{
         this.blinking = blinking;
     }
 
-    movePlayer(keys){
-        if(keys["w"] && this.y>0 && !keys["a"] && !keys["s"] && !keys["d"]){
-            this.moving = true; //had to put these in here to prevent animation of sprite on random key presses
-            this.frameY = 1;
-            this.y -= this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
-        }else{
+    movePlayer(keys, deltaTime = 1 / 60, touchInput = {}){
+        const up = keys["w"] || keys["W"] || keys["ArrowUp"] || touchInput.up;
+        const left = keys["a"] || keys["A"] || keys["ArrowLeft"] || touchInput.left;
+        const down = keys["s"] || keys["S"] || keys["ArrowDown"] || touchInput.down;
+        const right = keys["d"] || keys["D"] || keys["ArrowRight"] || touchInput.right;
+        let inputX = 0;
+        let inputY = 0;
+
+        if (left) inputX -= 1;
+        if (right) inputX += 1;
+        if (up) inputY -= 1;
+        if (down) inputY += 1;
+
+        if (inputX === 0 && inputY === 0) {
             this.moving = false;
+            return;
         }
-        if(keys["a"] && this.x>2 && !keys["w"] && !keys["s"] && !keys["d"]){
-            this.moving = true;
-            this.frameY = 2;
-            this.x -= this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed
+
+        const length = Math.hypot(inputX, inputY);
+        const velocityX = (inputX / length) * this.speed * deltaTime;
+        const velocityY = (inputY / length) * this.speed * deltaTime;
+
+        this.moving = true;
+        if (Math.abs(inputX) > Math.abs(inputY)) {
+            this.frameY = inputX < 0 ? 2 : 3;
+        } else {
+            this.frameY = inputY < 0 ? 1 : 0;
         }
-        if(keys["s"] && this.y<this.canvas.height-this.height && !keys["a"] && !keys["w"] && !keys["d"]){
-            this.moving = true;
-            this.frameY = 0;
-            this.y += this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed
+
+        this.moveAxis("x", velocityX);
+        this.moveAxis("y", velocityY);
+    }
+
+    moveAxis(axis, amount){
+        if (amount === 0) return;
+
+        this[axis] += amount;
+        this.x = Math.max(0, Math.min(this.x, this.canvas.width - this.scaleWidth));
+        this.y = Math.max(0, Math.min(this.y, this.canvas.height - this.scaleHeight));
+
+        if(this.isColliding(this.collides, this, ...this.obstacles)) {
+            this[axis] -= amount;
         }
-        if(keys["d"] && this.x<this.canvas.width-this.width && !keys["a"] && !keys["s"] && !keys["w"]){
-            this.moving = true;
-            this.frameY = 3;
-            this.x += this.speed;
-            if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed
-        }
-       
     }
 
     isColliding(callback, player, ...obstacles){

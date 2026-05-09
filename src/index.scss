@@ -46,6 +46,22 @@ body {
         radial-gradient(circle at 80% 10%, #454c24 0%, transparent 33%),
         linear-gradient(140deg, #232615 0%, #3b3f22 60%, #1b1d12 100%);
     color: #efe6c5;
+    overflow-x: hidden;
+}
+
+body.is-playing {
+    overflow: hidden;
+    touch-action: none;
+}
+
+#canvas1 {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: #11140c;
+    z-index: 1;
+    touch-action: none;
 }
 
 .social-links {
@@ -179,7 +195,7 @@ body {
 
 #button12 {
     display: flex;
-    position: absolute;
+    position: fixed;
     margin-top: 8px;
     left: 10px;
     height: 2.6rem;
@@ -219,13 +235,15 @@ body {
 
 #death-center,
 #survive-center {
-    height: 100%;
-    position: absolute;
+    min-height: 100dvh;
+    position: fixed;
+    inset: 0;
     justify-content: center;
     display: flex;
-    width: 100%;
     align-items: center;
     padding: 14px;
+    z-index: 5;
+    background: rgba(7, 8, 5, 0.42);
 }
 
 #death,
@@ -279,6 +297,59 @@ body {
     letter-spacing: 0.02em;
 }
 
+#touch-controls {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    width: 148px;
+    height: 148px;
+    z-index: 4;
+    display: none;
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(3, 48px);
+    gap: 2px;
+    opacity: 0.88;
+    user-select: none;
+    touch-action: none;
+}
+
+.touch-button {
+    border: 2px solid rgba(255, 239, 177, 0.8);
+    border-radius: 8px;
+    background: rgba(14, 18, 12, 0.72);
+    color: #fff0a6;
+    font: 800 1.4rem/1 Arial, sans-serif;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.38);
+    touch-action: none;
+}
+
+.touch-button.is-pressed,
+.touch-button:active {
+    transform: translateY(1px);
+    background: rgba(227, 185, 73, 0.88);
+    color: #18130c;
+}
+
+.touch-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.touch-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.touch-down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.touch-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
 .menu-actions {
     display: flex;
     flex-direction: column;
@@ -326,6 +397,20 @@ body {
     #directions {
         margin-top: 0;
     }
+
+    #title {
+        order: 1;
+    }
+
+    #title2 {
+        order: 2;
+    }
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+    #touch-controls {
+        display: grid;
+    }
 }
 
 @media (max-width: 640px) {
@@ -345,5 +430,14 @@ body {
         min-width: 190px;
         font-size: 0.85rem;
         letter-spacing: 0.05em;
+    }
+
+    #touch-controls {
+        right: max(10px, env(safe-area-inset-right));
+        bottom: max(10px, env(safe-area-inset-bottom));
+        width: 132px;
+        height: 132px;
+        grid-template-columns: repeat(3, 42px);
+        grid-template-rows: repeat(3, 42px);
     }
 }

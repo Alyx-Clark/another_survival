@@ -3,26 +3,67 @@ import Enemy from "./enemy";
 import Obstacle from "./obstacle.js";
 import Button from "./button.js";
 
+const BASE_WIDTH = 1503;
+const BASE_HEIGHT = 947;
 
-
-
+const BASE_OBSTACLES = [
+    [190, 30, 150, 110],
+    [395, 30, 145, 110],
+    [605, 30, 150, 110],
+    [190, 680, 150, 110],
+    [540, 680, 160, 110],
+    [945, 685, 150, 100],
+    [190, 435, 80, 90],
+    [385, 435, 110, 90],
+    [280, 375, 170, 100],
+    [665, 435, 60, 90],
+    [840, 435, 130, 90],
+    [720, 375, 190, 90],
+    [1330, 710, 302, 80],
+    [1100, 70, 250, 125],
+    [1, 430, 110, 30],
+    [1465, 370, 10, 1],
+    [30, 1, 120, 90],
+    [1395, 110, 120, 90],
+    [1287, 285, 120, 70],
+    [972, 437, 120, 70],
+    [1380, 560, 120, 70],
+    [1060, 620, 120, 70],
+    [370, 725, 135, 80],
+    [1035, 235, 50, 1],
+    [840, 820, 10, 1],
+    [1100, 785, 30, 1],
+    [128, 495, 30, 1],
+    [509, 435, 140, 1],
+];
 
 export default class Game {
     constructor(){
         this.canvas = document.getElementById("canvas1");
         this.ctx = this.canvas.getContext("2d");
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        this.ctx.imageSmoothingEnabled = false;
         document.body.scrollTop = 0;
-        document.body.style.overflow = 'hidden';
-        this.a = document.getElementById("canvas1").style.display="block";
-        this.scaleX = 1503;
-        this.scaleY = 947;
-        this.currentX = this.canvas.width/this.scaleX;
-        this.currentY = this.canvas.height/this.scaleY;
-        this.keys = [];
-        this.audioButton = new Button(2, 2, 2+(this.canvas.width/50), 2+(this.canvas.height/30));
-        this.music = document.createElement('audio');
+        document.body.style.overflow = "auto";
+        document.documentElement.style.overflow = "auto";
+
+        this.baseWidth = BASE_WIDTH;
+        this.baseHeight = BASE_HEIGHT;
+        this.keys = {};
+        this.touchInput = {};
+        this.enemies = [];
+        this.obstacles = [];
+        this.currentLevelIndex = 0;
+        this.levelStartedAt = 0;
+        this.gameStarted = false;
+        this.paused = false;
+        this.counter = 0;
+        this.lastFrame = 0;
+        this.spriteTimer = 0;
+        this.damageCooldown = null;
+        this.assetBasePath = window.location.pathname.startsWith("/another-survival") ? "/another-survival" : ".";
+
+        this.audioButton = new Button(12, 12, 56, 56);
+        this.music = document.createElement("audio");
         this.audioImg = new Image();
         this.muteImg = new Image();
         this.heart = new Image();
@@ -32,19 +73,12 @@ export default class Game {
         this.enemySprite = new Image();
         this.background = new Image();
         this.gameOverImg = new Image();
-        this.counter = 0;
         this.winImg = new Image();
-        this.paused = false;
-        this.assetBasePath = window.location.pathname.startsWith("/another-survival") ? "/another-survival" : ".";
+
         this.loadInitialComponents();
-        this.player1 = new Player(this.canvas, 100*this.currentX, 170*this.currentY, 42.5, 68.5, 42.5*this.currentX, 
-            68.5*this.currentY, 0, 3, this.canvas.width/170, false, 0, 3, this.obstacles, true, false);
-        this.enemy1 = new Enemy(this.canvas, 760*this.currentX, 580*this.currentY, 64, 64, 32*this.currentX,
-            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
-        this.enemy2 = new Enemy(this.canvas, 500*this.currentX, 300*this.currentY, 64, 64, 32*this.currentX,
-            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
-        this.enemy3 = new Enemy(this.canvas, 10*this.currentX, 840*this.currentY, 64, 64, 32*this.currentX,
-            48*this.currentY, 0, 3, this.canvas.width/300, false, 0, 3, this.obstacles, true);
+        this.levels = this.createLevels();
+        this.resizeCanvas();
+        this.loadLevel(0, true);
         this.registerEvents();
         this.animate();
         this.title();
@@ -55,78 +89,51 @@ export default class Game {
         this.enemySprite.src = this.assetPath("images/ghost.png");
         this.playerSprite.src = this.assetPath("images/player_sprite_resize.png");
         this.walkSound.src = this.assetPath("sounds/walking.wav");
-        this.walkSound.playbackRate = 12;
-        this.muteImg.src = this.assetPath("images/muteButton.png")
+        this.walkSound.loop = true;
+        this.walkSound.playbackRate = 1.35;
+        this.muteImg.src = this.assetPath("images/muteButton.png");
         this.music.src = this.assetPath("sounds/Haunted_Swamp.wav");
         this.audioImg.src = this.assetPath("images/soundButton.png");
         this.gameOverImg.src = this.assetPath("images/game-over.png");
         this.damage.src = this.assetPath("sounds/hit.wav");
         this.heart.src = this.assetPath("images/heart.png");
         this.winImg.src = this.assetPath("images/win.png");
-        this.obstacles = [];
-        const house1 = new Obstacle(190*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
-        const house2 = new Obstacle(395*this.currentX, 30*this.currentY, 145*this.currentX, 110*this.currentY);
-        const house3 = new Obstacle(605*this.currentX, 30*this.currentY, 150*this.currentX, 110*this.currentY);
-        const house4 = new Obstacle(190*this.currentX, 680*this.currentY, 150*this.currentX, 110*this.currentY);
-        const house5 = new Obstacle(540*this.currentX, 680*this.currentY, 160*this.currentX, 110*this.currentY);
-        const house6 = new Obstacle(945*this.currentX, 685*this.currentY, 150*this.currentX, 100*this.currentY);
+    }
 
-        const store1left = new Obstacle(190*this.currentX, 435*this.currentY, 80*this.currentX, 90*this.currentY);
-        const store1right = new Obstacle(385*this.currentX, 435*this.currentY, 110*this.currentX, 90*this.currentY);
-        const store1middle = new Obstacle(280*this.currentX, 375*this.currentY, 170*this.currentX, 100*this.currentY);
-
-        const store2left = new Obstacle(665*this.currentX, 435*this.currentY, 60*this.currentX, 90*this.currentY);
-        const store2right = new Obstacle(840*this.currentX, 435*this.currentY, 130*this.currentX, 90*this.currentY);
-        const store2middle = new Obstacle(720*this.currentX, 375*this.currentY, 190*this.currentX, 90*this.currentY);
-
-        const store3 = new Obstacle(1330*this.currentX, 710*this.currentY, 302*this.currentX, 80*this.currentY);
-        const largeStore = new Obstacle(1100*this.currentX, 70*this.currentY, 250*this.currentX, 125*this.currentY);
-
-        const gravestone1 = new Obstacle(1*this.currentX, 430*this.currentY, 110*this.currentX, 30*this.currentY);
-        const gravestone2 = new Obstacle(1465*this.currentX, 370*this.currentY, 10*this.currentX, 1*this.currentY);
-
-        const tree1 = new Obstacle(30*this.currentX, 1*this.currentY, 120*this.currentX, 90*this.currentY);
-        const tree2 = new Obstacle(1395*this.currentX, 110*this.currentY, 120*this.currentX, 90*this.currentY);
-        const tree3 = new Obstacle(1287*this.currentX, 285*this.currentY, 120*this.currentX, 70*this.currentY);
-        const tree4 = new Obstacle(972*this.currentX, 437*this.currentY, 120*this.currentX, 70*this.currentY);
-        const tree5 = new Obstacle(1380*this.currentX, 560*this.currentY, 120*this.currentX, 70*this.currentY);
-        const tree6 = new Obstacle(1060*this.currentX, 620*this.currentY, 120*this.currentX, 70*this.currentY);
-        const tree7 = new Obstacle(370*this.currentX, 725*this.currentY, 135*this.currentX, 80*this.currentY);
-
-        const sign = new Obstacle(1035*this.currentX, 235*this.currentY, 50*this.currentX, 1*this.currentY);
-        const littleSign = new Obstacle(840*this.currentX, 820*this.currentY, 10*this.currentX, 1*this.currentY);
-        const boxes = new Obstacle(1100*this.currentX, 785*this.currentY, 30*this.currentX, 1*this.currentY);
-        const littleGrave = new Obstacle(128*this.currentX, 495*this.currentY, 30*this.currentX, 1*this.currentY);
-        const wall = new Obstacle(509*this.currentX, 435*this.currentY, 140*this.currentX, 1*this.currentY);
-
-        this.obstacles.push(house1);
-        this.obstacles.push(house2);
-        this.obstacles.push(house3);
-        this.obstacles.push(house4);
-        this.obstacles.push(house5);
-        this.obstacles.push(house6);
-        this.obstacles.push(store1left);
-        this.obstacles.push(store1right);
-        this.obstacles.push(store1middle);
-        this.obstacles.push(store2left);
-        this.obstacles.push(store2right);
-        this.obstacles.push(store2middle);
-        this.obstacles.push(store3);
-        this.obstacles.push(largeStore);
-        this.obstacles.push(gravestone1);
-        this.obstacles.push(gravestone2);
-        this.obstacles.push(tree1);
-        this.obstacles.push(tree2);
-        this.obstacles.push(tree3);
-        this.obstacles.push(tree4);
-        this.obstacles.push(tree5);
-        this.obstacles.push(tree6);
-        this.obstacles.push(tree7);
-        this.obstacles.push(sign);
-        this.obstacles.push(littleSign);
-        this.obstacles.push(boxes);
-        this.obstacles.push(littleGrave);
-        this.obstacles.push(wall);
+    createLevels(){
+        return [
+            {
+                name: "Haunted Arrival",
+                start: { x: 100, y: 170 },
+                exit: { x: 0, y: 800, width: 70, height: 130 },
+                ghosts: [
+                    { x: 760, y: 580, speed: 0.92, delay: 2500 },
+                    { x: 500, y: 300, speed: 0.86, delay: 3500 },
+                    { x: 10, y: 840, speed: 0.82, delay: 11000 },
+                ],
+            },
+            {
+                name: "Cross Streets",
+                start: { x: 90, y: 820 },
+                exit: { x: 1430, y: 45, width: 70, height: 125 },
+                ghosts: [
+                    { x: 740, y: 150, speed: 0.88, delay: 1400 },
+                    { x: 900, y: 610, speed: 0.84, delay: 2600 },
+                    { x: 1260, y: 830, speed: 0.78, delay: 8000 },
+                ],
+            },
+            {
+                name: "Last Lantern",
+                start: { x: 1390, y: 70 },
+                exit: { x: 0, y: 455, width: 65, height: 120 },
+                ghosts: [
+                    { x: 760, y: 580, speed: 0.9, delay: 800 },
+                    { x: 520, y: 160, speed: 0.84, delay: 2100 },
+                    { x: 1180, y: 735, speed: 0.8, delay: 4300 },
+                    { x: 130, y: 835, speed: 0.74, delay: 10000 },
+                ],
+            },
+        ];
     }
 
     assetPath(path){
@@ -135,166 +142,396 @@ export default class Game {
     }
 
     registerEvents(){
+        const movementKeys = new Set(["w", "a", "s", "d", "W", "A", "S", "D", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]);
+
         window.addEventListener("keydown", (e) => {
+            if (movementKeys.has(e.key)) e.preventDefault();
             this.keys[e.key] = true;
         });
-        
+
         window.addEventListener("keyup", (e) => {
+            if (movementKeys.has(e.key)) e.preventDefault();
             delete this.keys[e.key];
-            this.player1.moving = false;
         });
-        
-        window.addEventListener('click', (e) => {
+
+        window.addEventListener("resize", () => {
+            this.resizeCanvas();
+        });
+
+        window.addEventListener("click", (e) => {
             if((e.x > this.audioButton.x && e.x < this.audioButton.endx) && (e.y > this.audioButton.y && e.y < this.audioButton.endy)){
                 if(this.music.paused){
                     this.music.play();
                     this.music.loop = true;
                 }else{
                     this.music.pause();
+                    this.walkSound.pause();
+                    this.walkSound.currentTime = 0;
                 }
             }
-        })
+        });
 
+        document.querySelectorAll("[data-touch-key]").forEach((button) => {
+            const key = button.dataset.touchKey;
+            const press = (e) => {
+                e.preventDefault();
+                this.touchInput[key] = true;
+                button.classList.add("is-pressed");
+            };
+            const release = (e) => {
+                e.preventDefault();
+                delete this.touchInput[key];
+                button.classList.remove("is-pressed");
+            };
+
+            button.addEventListener("pointerdown", press);
+            button.addEventListener("pointerup", release);
+            button.addEventListener("pointercancel", release);
+            button.addEventListener("pointerleave", release);
+        });
     }
 
     title(){
-        this.a = document.getElementById("canvas1").style.display = "none";
-        document.getElementById("button12").style.display="none"
-        document.getElementById("death-center").style.display="none";
-        document.getElementById("survive-center").style.display="none";
+        this.canvas.style.display = "none";
+        document.getElementById("button12").style.display = "none";
+        document.getElementById("death-center").style.display = "none";
+        document.getElementById("survive-center").style.display = "none";
+        document.getElementById("touch-controls").style.display = "none";
+
         const playButton = document.getElementById("button1");
-        playButton.addEventListener('click', (e) => {
-            if(e){
-                document.getElementById("title").style.display = "none";
-                document.getElementById("title2").style.display = "none";
-                document.getElementById("button12").style.display = "flex";
-                const menus = document.getElementById("button12");
-                menus.addEventListener('click', (e) => {
-                    if(e){
-                        location.reload();
-                    }
-                })
-                this.a = document.getElementById("canvas1").style.display="block";
-            }
-        })
+        playButton.addEventListener("click", () => {
+            document.getElementById("title").style.display = "none";
+            document.getElementById("title2").style.display = "none";
+            document.getElementById("button12").style.display = "flex";
+            document.getElementById("touch-controls").style.display = "";
+            document.body.classList.add("is-playing");
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+            this.canvas.style.display = "block";
+            this.gameStarted = true;
+            this.levelStartedAt = performance.now();
+            this.lastFrame = performance.now();
+        });
+
+        document.getElementById("button12").addEventListener("click", () => {
+            location.reload();
+        });
     }
 
-    between(x, min, max) {
-        return x >= min && x <= max;
+    resizeCanvas(){
+        const previousScaleX = this.currentX || 1;
+        const previousScaleY = this.currentY || 1;
+        const playerBase = this.player1 ? this.toBasePoint(this.player1.x, this.player1.y, previousScaleX, previousScaleY) : null;
+        const enemyBases = this.enemies.map((enemy) => this.toBasePoint(enemy.x, enemy.y, previousScaleX, previousScaleY));
+
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.ctx.imageSmoothingEnabled = false;
+        this.currentX = this.canvas.width / this.baseWidth;
+        this.currentY = this.canvas.height / this.baseHeight;
+        this.playerWidth = this.clamp(this.canvas.width * 0.03, 28, 48);
+        this.playerHeight = this.playerWidth * 1.61;
+        this.enemyWidth = this.clamp(this.canvas.width * 0.032, 30, 52);
+        this.enemyHeight = this.enemyWidth * 1.25;
+        this.playerSpeed = this.clamp(this.canvas.width / 8, 130, 210);
+        this.enemyBaseSpeed = this.clamp(this.canvas.width / 10.5, 78, 122);
+        this.audioButton = new Button(12, 12, 58, 58);
+
+        const level = this.levels ? this.levels[this.currentLevelIndex] : null;
+        if (level) {
+            this.obstacles = this.createObstacles();
+            this.exit = this.scaleRect(level.exit);
+        }
+
+        if (this.player1 && playerBase) {
+            this.player1.scaleWidth = this.playerWidth;
+            this.player1.scaleHeight = this.playerHeight;
+            this.player1.speed = this.playerSpeed;
+            this.player1.obstacles = this.obstacles;
+            this.player1.x = this.clamp(this.screenX(playerBase.x), 0, this.canvas.width - this.player1.scaleWidth);
+            this.player1.y = this.clamp(this.screenY(playerBase.y), 0, this.canvas.height - this.player1.scaleHeight);
+        }
+
+        this.enemies.forEach((enemy, index) => {
+            const enemyBase = enemyBases[index];
+            if (!enemyBase) return;
+
+            enemy.scaleWidth = this.enemyWidth;
+            enemy.scaleHeight = this.enemyHeight;
+            enemy.obstacles = this.obstacles;
+            enemy.speed = this.enemyBaseSpeed * (enemy.speedFactor || 1);
+            enemy.x = this.clamp(this.screenX(enemyBase.x), 0, this.canvas.width - enemy.scaleWidth);
+            enemy.y = this.clamp(this.screenY(enemyBase.y), 0, this.canvas.height - enemy.scaleHeight);
+        });
+    }
+
+    loadLevel(levelIndex, keepHealth = false){
+        const level = this.levels[levelIndex];
+        const currentHealth = this.player1 && keepHealth ? this.player1.health : 3;
+        this.currentLevelIndex = levelIndex;
+        this.levelStartedAt = performance.now();
+        this.obstacles = this.createObstacles();
+        this.exit = this.scaleRect(level.exit);
+
+        this.player1 = new Player(
+            this.canvas,
+            this.screenX(level.start.x),
+            this.screenY(level.start.y),
+            42.5,
+            68.5,
+            this.playerWidth,
+            this.playerHeight,
+            0,
+            3,
+            this.playerSpeed,
+            false,
+            0,
+            currentHealth,
+            this.obstacles,
+            true,
+            false
+        );
+
+        this.enemies = level.ghosts.map((ghost) => {
+            const enemy = new Enemy(
+                this.canvas,
+                this.screenX(ghost.x),
+                this.screenY(ghost.y),
+                64,
+                64,
+                this.enemyWidth,
+                this.enemyHeight,
+                0,
+                3,
+                this.enemyBaseSpeed * ghost.speed,
+                false,
+                0,
+                3,
+                this.obstacles,
+                true
+            );
+            enemy.speedFactor = ghost.speed;
+            enemy.spawnDelay = ghost.delay;
+            return enemy;
+        });
+
+        this.showLevelBanner(level);
+    }
+
+    createObstacles(){
+        return BASE_OBSTACLES.map(([x, y, width, height]) => {
+            return new Obstacle(this.screenX(x), this.screenY(y), this.screenX(width), this.screenY(height));
+        });
+    }
+
+    showLevelBanner(level){
+        this.levelBanner = {
+            text: `Level ${this.currentLevelIndex + 1}: ${level.name}`,
+            until: performance.now() + 2200,
+        };
+    }
+
+    toBasePoint(x, y, scaleX = this.currentX, scaleY = this.currentY){
+        return { x: x / scaleX, y: y / scaleY };
+    }
+
+    screenX(value){
+        return value * this.currentX;
+    }
+
+    screenY(value){
+        return value * this.currentY;
+    }
+
+    scaleRect(rect){
+        return {
+            x: this.screenX(rect.x),
+            y: this.screenY(rect.y),
+            width: this.screenX(rect.width),
+            height: this.screenY(rect.height),
+        };
+    }
+
+    clamp(value, min, max){
+        return Math.max(min, Math.min(value, max));
+    }
+
+    rectsOverlap(a, b){
+        return (
+            a.x < b.x + b.width &&
+            a.x + a.scaleWidth > b.x &&
+            a.y < b.y + b.height &&
+            a.y + a.scaleHeight > b.y
+        );
     }
 
     loseHealth(){
-        let that = this;
-        if((this.between(this.player1.x, this.enemy1.x-25, this.enemy1.x+25) && this.between(this.player1.y, this.enemy1.y-25, this.enemy1.y+25)) ||
-            (this.between(this.player1.x, this.enemy2.x-25, this.enemy2.x+25) && this.between(this.player1.y, this.enemy2.y-25, this.enemy2.y+25)) ||
-            (this.between(this.player1.x, this.enemy3.x-25, this.enemy3.x+25) && this.between(this.player1.y, this.enemy3.y-25, this.enemy3.y+25))){
-                if(!this.player1.blinking){
-                    !this.music.paused ? this.damage.play() : null;
-                    this.player1.health--;
-                    this.player1.blinking = true;
-                    setTimeout(function(){
-                        that.player1.blinking = false;
-                    }, 1500);
-                }
-                if(this.player1.health === 0){
-                    this.player1.alive = false;
-                    document.getElementById("death-center").style.display="flex"
-                    const menuButton = document.getElementById("button2");
-                    menuButton.addEventListener('click', (e) => {
-                        if(e){
-                            location.reload();
-                        }
-                    })
-                    this.paused = true;
-            }
+        const hit = this.enemies.some((enemy) => {
+            return this.rectsOverlap(this.player1, {
+                x: enemy.x,
+                y: enemy.y,
+                width: enemy.scaleWidth,
+                height: enemy.scaleHeight,
+            });
+        });
+
+        if (!hit || this.player1.blinking) return;
+
+        if(!this.music.paused) this.damage.play();
+        this.player1.health--;
+        this.player1.blinking = true;
+        window.clearTimeout(this.damageCooldown);
+        this.damageCooldown = window.setTimeout(() => {
+            this.player1.blinking = false;
+        }, 1500);
+
+        if(this.player1.health === 0){
+            this.player1.alive = false;
+            document.getElementById("death-center").style.display = "flex";
+            document.getElementById("button2").addEventListener("click", () => {
+                location.reload();
+            }, { once: true });
+            this.paused = true;
+            this.stopWalking();
         }
     }
 
     winGame(){
-        if(this.between(this.player1.x, 0, 20*this.currentX) && this.between(this.player1.y, 800*this.currentY, 930*this.currentY)){
-            document.getElementById("survive-center").style.display="flex"
-            const winMenuButton = document.getElementById("button3");
-            winMenuButton.addEventListener('click', (e) => {
-                if(e){
-                    location.reload();
-                }
-            })
-            this.paused = true;
+        if(!this.rectsOverlap(this.player1, this.exit)) return;
+
+        if (this.currentLevelIndex < this.levels.length - 1) {
+            this.loadLevel(this.currentLevelIndex + 1, true);
+            return;
         }
+
+        document.getElementById("survive-center").style.display = "flex";
+        document.getElementById("button3").addEventListener("click", () => {
+            location.reload();
+        }, { once: true });
+        this.paused = true;
+        this.stopWalking();
     }
 
     drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
         this.ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
     }
-    
-    animate(){
-            setTimeout(() => {
-                requestAnimationFrame(this.animate.bind(this));
-            }, 1000 / 15);
-            if(!this.paused && this.a !== "none" ){
-                if(this.counter<5) this.counter++;
-                //clear canvas between each animation frame
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                //draws our background and where to start drawing from
-                this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
-                                                                                                //change these to change size of sprite
-                this.drawSprite(this.playerSprite, this.player1.width * this.player1.frameX, this.player1.height * this.player1.frameY, this.player1.width, 
-                    this.player1.height, this.player1.x, this.player1.y, this.canvas.width/45, this.canvas.height/15);
-                                        //what to crop and where to start cropping from in sprite sheet
-                this.drawSprite(this.enemySprite, this.enemy1.width * this.enemy1.frameX, this.enemy1.height * this.enemy1.frameY, this.enemy1.width,
-                    this.enemy1.height, this.enemy1.x, this.enemy1.y, this.canvas.width/45, this.canvas.height/15);
 
-                this.drawSprite(this.enemySprite, this.enemy2.width * this.enemy2.frameX, this.enemy2.height * this.enemy2.frameY, this.enemy2.width,
-                    this.enemy2.height, this.enemy2.x, this.enemy2.y, this.canvas.width/45, this.canvas.height/15);
+    drawExit(){
+        this.ctx.save();
+        this.ctx.fillStyle = "rgba(224, 217, 145, 0.28)";
+        this.ctx.strokeStyle = "rgba(255, 244, 175, 0.92)";
+        this.ctx.lineWidth = 3;
+        this.ctx.fillRect(this.exit.x, this.exit.y, this.exit.width, this.exit.height);
+        this.ctx.strokeRect(this.exit.x, this.exit.y, this.exit.width, this.exit.height);
+        if (this.exit.width > 44) {
+            this.ctx.fillStyle = "#fff0a6";
+            this.ctx.font = "700 14px Arial, sans-serif";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText("EXIT", this.exit.x + this.exit.width / 2, this.exit.y + Math.max(18, this.exit.height / 2));
+        }
+        this.ctx.restore();
+    }
 
-                this.drawSprite(this.enemySprite, this.enemy3.width * this.enemy3.frameX, this.enemy3.height * this.enemy3.frameY, this.enemy3.width,
-                    this.enemy3.height, this.enemy3.x, this.enemy3.y, this.canvas.width/45, this.canvas.height/15);
-                
-                if(this.player1.health === 3){
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/10.5, this.canvas.width/50, this.canvas.height/30);
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/7, this.canvas.width/50, this.canvas.height/30);
-                }
-                if(this.player1.health === 2){
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/10.5, this.canvas.width/50, this.canvas.height/30);
-                }
-                if(this.player1.health === 1){
-                    this.ctx.drawImage(this.heart, 2, this.canvas.height/20, this.canvas.width/50, this.canvas.height/30);
-                }
+    drawHud(now){
+        const iconSize = 34;
+        for (let i = 0; i < this.player1.health; i++) {
+            this.ctx.drawImage(this.heart, 14, 72 + (i * 40), iconSize, iconSize);
+        }
 
-                if(!this.music.paused){
-                    this.ctx.drawImage(this.audioImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
-                }else{
-                    this.ctx.drawImage(this.muteImg, 2, 2, this.canvas.width/50, this.canvas.height/30);
-                }
-                if(this.player1.moving && !this.music.paused) this.walkSound.play();
-                if(this.counter > 1){
-                    setTimeout(function(){
-                that.enemy1.froze = false;
-                }, 4000);}
-                this.player1.movePlayer(this.keys);
-                this.player1.moveSprite();
-                if(!this.enemy1.froze) this.enemy1.moveEnemy(this.player1.x, this.player1.y);
-                if(!this.enemy1.froze) this.enemy1.moveSprite();
-                if(this.counter > 1){
-                    setTimeout(function(){
-                    that.enemy2.froze = false;
-                }, 4000);}
-                if(!this.enemy2.froze) this.enemy2.moveEnemy(this.player1.x, this.player1.y);
-                if(!this.enemy2.froze) this.enemy2.moveSprite();
-                let that = this;
-                if(this.counter > 1){
-                    setTimeout(function(){
-                    that.enemy3.froze = false;
-                }, 20000);}
-                if(!this.enemy3.froze) this.enemy3.moveEnemy(this.player1.x, this.player1.y);
-                if(!this.enemy3.froze) this.enemy3.moveSprite();
-                this.loseHealth();
-                this.winGame();
-            // }
+        this.ctx.drawImage(this.music.paused ? this.muteImg : this.audioImg, 12, 12, 42, 42);
+
+        this.ctx.save();
+        this.ctx.fillStyle = "rgba(10, 12, 8, 0.56)";
+        this.ctx.fillRect(this.canvas.width - 154, 14, 140, 38);
+        this.ctx.fillStyle = "#f6e7a9";
+        this.ctx.font = "700 16px Arial, sans-serif";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(`Level ${this.currentLevelIndex + 1}/${this.levels.length}`, this.canvas.width - 84, 39);
+
+        if (this.levelBanner && now < this.levelBanner.until) {
+            this.ctx.fillStyle = "rgba(10, 12, 8, 0.68)";
+            this.ctx.fillRect(this.canvas.width / 2 - 170, 24, 340, 48);
+            this.ctx.fillStyle = "#f7e6a4";
+            this.ctx.font = "700 20px Arial, sans-serif";
+            this.ctx.fillText(this.levelBanner.text, this.canvas.width / 2, 55);
+        }
+        this.ctx.restore();
+    }
+
+    updateAudio(){
+        if(this.player1.moving && !this.music.paused){
+            this.walkSound.play();
+        } else {
+            this.stopWalking();
         }
     }
+
+    stopWalking(){
+        this.walkSound.pause();
+        this.walkSound.currentTime = 0;
+    }
+
+    animate(timestamp = 0){
+        requestAnimationFrame(this.animate.bind(this));
+        const deltaTime = Math.min(((timestamp - this.lastFrame) / 1000) || (1 / 60), 0.05);
+        this.lastFrame = timestamp;
+
+        if(!this.gameStarted || this.paused) return;
+
+        const elapsed = timestamp - this.levelStartedAt;
+        this.spriteTimer += deltaTime;
+        const shouldAdvanceSprite = this.spriteTimer > 0.12;
+        if (shouldAdvanceSprite) this.spriteTimer = 0;
+
+        this.player1.movePlayer(this.keys, deltaTime, this.touchInput);
+        if (shouldAdvanceSprite) this.player1.moveSprite();
+
+        this.enemies.forEach((enemy) => {
+            enemy.froze = elapsed < enemy.spawnDelay;
+            if (!enemy.froze) {
+                enemy.moveEnemy(this.player1, deltaTime);
+                if (shouldAdvanceSprite) enemy.moveSprite();
+            }
+        });
+
+        this.loseHealth();
+        this.winGame();
+        this.updateAudio();
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
+        this.drawExit();
+
+        if (!this.player1.blinking || Math.floor(timestamp / 120) % 2 === 0) {
+            this.drawSprite(
+                this.playerSprite,
+                this.player1.width * this.player1.frameX,
+                this.player1.height * this.player1.frameY,
+                this.player1.width,
+                this.player1.height,
+                this.player1.x,
+                this.player1.y,
+                this.player1.scaleWidth,
+                this.player1.scaleHeight
+            );
+        }
+
+        this.enemies.forEach((enemy) => {
+            this.ctx.globalAlpha = enemy.froze ? 0.48 : 1;
+            this.drawSprite(
+                this.enemySprite,
+                enemy.width * enemy.frameX,
+                enemy.height * enemy.frameY,
+                enemy.width,
+                enemy.height,
+                enemy.x,
+                enemy.y,
+                enemy.scaleWidth,
+                enemy.scaleHeight
+            );
+            this.ctx.globalAlpha = 1;
+        });
+
+        this.drawHud(timestamp);
+    }
 }
-
-

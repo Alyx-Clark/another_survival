@@ -21,28 +21,52 @@ export default class Enemy{
         return x >= min && x <= max;
     }
 
-    moveEnemy(playerx, playery){
-        if(playery < this.y){
-            this.moving = true; //had to put these in here to prevent animation of sprite on random key presses
-            this.frameY = 3;
-            this.y -= this.speed;
-            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y += this.speed;
-        }if(playerx < this.x){
-            this.moving = true;
-            // this.frameY = 2;
-            this.x -= this.speed;
-            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x += this.speed;
-        }if(playery > this.y){
-            this.moving = true;
-            this.frameY = 0;
-            this.y += this.speed;
-            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.y -= this.speed;
-        }if(playerx > this.x){
-            this.moving = true;
-            // this.frameY = 3;
-            this.x += this.speed;
-            // if(this.isColliding(this.collides, this, ...this.obstacles)) this.x -= this.speed;
+    moveEnemy(player, deltaTime = 1 / 60){
+        const targetX = player.x + (player.scaleWidth / 2);
+        const targetY = player.y + (player.scaleHeight / 2);
+        const selfX = this.x + (this.scaleWidth / 2);
+        const selfY = this.y + (this.scaleHeight / 2);
+        const deltaX = targetX - selfX;
+        const deltaY = targetY - selfY;
+        const distance = Math.hypot(deltaX, deltaY);
+
+        if (distance < 1) {
+            this.moving = false;
+            return;
         }
+
+        const stepX = (deltaX / distance) * this.speed * deltaTime;
+        const stepY = (deltaY / distance) * this.speed * deltaTime;
+        const movedX = this.moveAxis("x", stepX);
+        const movedY = this.moveAxis("y", stepY);
+
+        if (!movedX && Math.abs(stepX) > 0.1) {
+            this.moveAxis("y", Math.sign(deltaY || 1) * this.speed * deltaTime);
+        }
+        if (!movedY && Math.abs(stepY) > 0.1) {
+            this.moveAxis("x", Math.sign(deltaX || 1) * this.speed * deltaTime);
+        }
+
+        this.frameY = Math.abs(deltaY) > Math.abs(deltaX)
+            ? (deltaY > 0 ? 0 : 3)
+            : (deltaX > 0 ? 3 : 2);
+        this.moving = true;
+    }
+
+    moveAxis(axis, amount){
+        if (amount === 0) return false;
+
+        const previous = this[axis];
+        this[axis] += amount;
+        this.x = Math.max(0, Math.min(this.x, this.canvas.width - this.scaleWidth));
+        this.y = Math.max(0, Math.min(this.y, this.canvas.height - this.scaleHeight));
+
+        if(this.isColliding(this.collides, this, ...this.obstacles)) {
+            this[axis] = previous;
+            return false;
+        }
+
+        return previous !== this[axis];
     }
 
     isColliding(callback, player, ...obstacles){

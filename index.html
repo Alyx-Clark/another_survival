@@ -29,6 +29,12 @@
 <body>
     <button type="button" id="button12">Menu</button>
     <canvas id="canvas1"></canvas>
+    <div id="touch-controls" aria-label="Movement controls">
+        <button type="button" class="touch-button touch-up" data-touch-key="up" aria-label="Move up">&uarr;</button>
+        <button type="button" class="touch-button touch-left" data-touch-key="left" aria-label="Move left">&larr;</button>
+        <button type="button" class="touch-button touch-down" data-touch-key="down" aria-label="Move down">&darr;</button>
+        <button type="button" class="touch-button touch-right" data-touch-key="right" aria-label="Move right">&rarr;</button>
+    </div>
     <div id="survive-center">
         <div id="survive">
             <h1>Another Survival</h1>
@@ -81,9 +87,9 @@
             <div id="directions">
                 <h1>Another Survival</h1>
     
-                <p>You have wandered into a haunted city.....reach the other side of the map where the path ends to escape.
+                <p>You have wandered into a haunted city.....reach each glowing exit before the spirits close in.
                     You do not have to stay on the path, but you will still be obstructed by certain objects. You only have three hearts so avoid
-                    the ghost!
+                    the ghosts! Use WASD, arrow keys, or the on-screen controls.
                 </p>
                 <h2>Click play to start</h2>
                 <div class="menu-actions">
